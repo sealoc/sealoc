@@ -1,0 +1,15 @@
+[tasks.download_dataset]
+default_destination = "."
+exclude_patterns = []
+
+[[tasks.download_dataset.routing_rules]]
+patterns = ["*_images_raw.zip"]
+destination = "sealoc_images_raw"
+
+[[tasks.download_dataset.routing_rules]]
+patterns = ["*_images_grayworld.zip"]
+destination = "sealoc_images_grayworld"
+
+[[tasks.download_dataset.routing_rules]]
+patterns = ["*.csv", "*.db", "*.sqlite"]
+destination = "."
