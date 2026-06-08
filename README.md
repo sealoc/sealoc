@@ -158,16 +158,16 @@ If you use the `sealoc` library or dataset in your research, please cite the fol
 **Paper**
 
 ```bibtex
-@misc{larsen_long-term_2026,
-  title        = {Long-Term Visual Localization in Dynamic Benthic Environments: A Dataset, Footprint-Based Ground Truth, and Visual Place Recognition Benchmark},
+@article{larsen_long-term_2026,
+  title        = {Long-term visual localization in dynamic benthic environments: the {SEALOC} dataset, footprint-based ground truth, and visual place recognition benchmark},
   shorttitle   = {Long-Term Visual Localization in Dynamic Benthic Environments},
   author       = {Larsen, Martin Kvisvik and Pizarro, Oscar},
   year         = {2026},
-  month        = mar,
-  publisher    = {arXiv},
-  doi          = {10.48550/arXiv.2603.04056},
-  url          = {http://arxiv.org/abs/2603.04056},
-  note         = {arXiv:2603.04056 [cs]},
-  keywords     = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Robotics},
+  month        = june,
+  journal      = {Frontiers in Robotics and {AI}},
+  volume       = {13},
+  pages        = {1821019},
+  doi          = {10.3389/frobt.2026.1821019},
+  url          = {https://www.frontiersin.org/articles/10.3389/frobt.2026.1821019/full},
 }
 ```
