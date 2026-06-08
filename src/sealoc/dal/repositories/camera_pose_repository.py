@@ -86,7 +86,7 @@ class CameraPoseRepository:
             statement = db.select(orm.CameraPoseRecord).where(
                 orm.CameraPoseRecord.camera_id.in_(batch)  # type: ignore[attr-defined]
             )
-            result = result = self.session.exec(statement)
+            result = self.session.exec(statement)
             aggregated_poses.extend([to_model(record) for record in result.all()])
         return aggregated_poses
 

@@ -86,7 +86,7 @@ class CameraFootprintRepository:
             statement = db.select(orm.CameraFootprintRecord).where(
                 orm.CameraFootprintRecord.camera_id.in_(batch)  # type: ignore[attr-defined]
             )
-            result = result = self.session.exec(statement)
+            result = self.session.exec(statement)
             aggregated_footprints.extend([to_model(record) for record in result.all()])
         return aggregated_footprints
 
