@@ -8,8 +8,9 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
-import sealoc.common.env as env
 import sealoc.database as db
+
+from sealoc.environment import Environment, load_environment
 
 from .repositories import (
     CameraBundleRepository,
@@ -19,10 +20,6 @@ from .stores import (
     ImageStore,
     create_image_store,
 )
-
-
-DB_URL_ENV_KEY: str = "SEALOC_DB_URL"
-IMAGE_DIR_ENV_KEY: str = "SEALOC_IMAGE_DIR"
 
 
 @dataclass(slots=True, frozen=True)
@@ -46,7 +43,7 @@ class DataAccessLayer:
     Unified access point for SEALOC data sources.
 
     Holds a database engine and an optional image store. Repositories are
-    accessed within a session scope via `dal.session()`. Use `create_data_access_layer`
+    accessed within a session scope via `dal.session()`. Use `load_data_access_layer`
     to construct an instance.
 
     Attributes
@@ -77,33 +74,40 @@ class DataAccessLayer:
             )
 
 
-def create_data_access_layer(
+def load_data_access_layer(
     database_url: str | None = None,
     image_dir: Path | str | None = None,
 ) -> DataAccessLayer:
     """
-    Create a DataAccessLayer from a database URL and an optional image directory.
+    Load a DataAccessLayer from the environment and optional overrides.
 
     Arguments
     ---------
-    database_url: Database URL string. Falls back to the `SEALOC_DB_URL` environment
-        variable; raises `RuntimeError` if neither is available.
-    image_dir: Path to the image directory. Falls back to the `SEALOC_IMAGE_DIR`
-        environment variable; `dal.image_store` will be `None` when neither is available.
+    database_url: Database URL string. Overrides `SEALOC_DATABASE_URL` from the
+        environment when provided. Raises `ValueError` if neither is available.
+    image_dir: Path to the image directory. Overrides `SEALOC_IMAGE_DIRECTORY` from
+        the environment when provided. `dal.image_store` will be `None` when neither
+        is available.
 
     Returns
     -------
     Configured DataAccessLayer instance.
     """
-    resolved_url: str = database_url or env.require(DB_URL_ENV_KEY)
-    resolved_image_dir: str | None = (
-        str(image_dir) if image_dir else env.get_str(IMAGE_DIR_ENV_KEY)
+    environment: Environment = load_environment()
+    resolved_url: str | None = database_url or environment.database_url
+    resolved_image_dir: Path | None = (
+        Path(image_dir) if image_dir else environment.image_directory
     )
+
+    if resolved_url is None:
+        raise ValueError(
+            "No database URL provided. Pass database_url explicitly or set SEALOC_DATABASE_URL."
+        )
 
     db.validate_database_url(resolved_url)
     engine: db.Engine = db.create_engine(url=resolved_url)
 
-    image_store = (
+    image_store: ImageStore | None = (
         create_image_store(image_dir=resolved_image_dir) if resolved_image_dir else None
     )
     return DataAccessLayer(engine=engine, image_store=image_store)
