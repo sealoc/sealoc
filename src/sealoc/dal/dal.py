@@ -8,8 +8,9 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
-import sealoc.common.env as env
 import sealoc.database as db
+
+from sealoc.environment import load_environment
 
 from .repositories import (
     CameraBundleRepository,
@@ -19,10 +20,6 @@ from .stores import (
     ImageStore,
     create_image_store,
 )
-
-
-DB_URL_ENV_KEY: str = "SEALOC_DB_URL"
-IMAGE_DIR_ENV_KEY: str = "SEALOC_IMAGE_DIR"
 
 
 @dataclass(slots=True, frozen=True)
@@ -86,19 +83,28 @@ def create_data_access_layer(
 
     Arguments
     ---------
-    database_url: Database URL string. Falls back to the `SEALOC_DB_URL` environment
-        variable; raises `RuntimeError` if neither is available.
-    image_dir: Path to the image directory. Falls back to the `SEALOC_IMAGE_DIR`
+    database_url: Database URL string. Falls back to the `SEALOC_DATABASE_URL`
+        environment variable via `load_environment()`; raises `ValidationError`
+        if neither is available.
+    image_dir: Path to the image directory. Falls back to the `SEALOC_IMAGE_DIRECTORY`
         environment variable; `dal.image_store` will be `None` when neither is available.
 
     Returns
     -------
     Configured DataAccessLayer instance.
     """
-    resolved_url: str = database_url or env.require(DB_URL_ENV_KEY)
-    resolved_image_dir: str | None = (
-        str(image_dir) if image_dir else env.get_str(IMAGE_DIR_ENV_KEY)
-    )
+    resolved_url: str
+    resolved_image_dir: Path | None
+
+    if database_url is not None:
+        resolved_url = database_url
+        resolved_image_dir = Path(image_dir) if image_dir else None
+    else:
+        environment = load_environment()
+        resolved_url = environment.database_url
+        resolved_image_dir = (
+            Path(image_dir) if image_dir else environment.image_directory
+        )
 
     db.validate_database_url(resolved_url)
     engine: db.Engine = db.create_engine(url=resolved_url)

@@ -20,8 +20,8 @@ dal: DataAccessLayer = create_data_access_layer(
 )
 ```
 
-If you have a `.env` file with `SEALOC_DB_URL` set, you can omit `database_url` and it
-will be picked up automatically. `image_dir` is always optional — `dal.image_store` will be
+If you have a `.env` file with `SEALOC_DATABASE_URL` set, you can omit `database_url` and it
+will be picked up automatically via `sealoc.environment`. `image_dir` is always optional — `dal.image_store` will be
 `None` if you skip it.
 
 All database queries happen inside a `dal.session()` context manager. The session

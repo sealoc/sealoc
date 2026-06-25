@@ -19,6 +19,7 @@ dependencies = [
     "numpy>=2.4.2",
     "pandas>=3.0.1",
     "pydantic>=2.12.5",
+    "pydantic-settings>=2.14.2",
     "pyproj>=3.7.2",
     "python-dotenv>=1.2.2",
     "rich>=15.0.0",
@@ -44,6 +45,10 @@ package = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.mypy]
+python_executable = ".venv/bin/python"
+plugins = ["pydantic.mypy"]
 
 [tool.ruff]
 line-length = 88

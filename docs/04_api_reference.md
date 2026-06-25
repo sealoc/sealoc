@@ -14,8 +14,8 @@ dal: DataAccessLayer = create_data_access_layer(
 ```
 
 Factory function for creating a `DataAccessLayer`. Pass `database_url` and `image_dir`
-explicitly. Both fall back to environment variables (`SEALOC_DB_URL`, `SEALOC_IMAGE_DIR`)
-if not provided, but explicit arguments are recommended.
+explicitly. Both fall back to environment variables (`SEALOC_DATABASE_URL`, `SEALOC_IMAGE_DIRECTORY`)
+loaded via `sealoc.environment` if not provided, but explicit arguments are recommended.
 
 ### `DataAccessLayer.session`
 

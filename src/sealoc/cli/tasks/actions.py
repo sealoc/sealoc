@@ -4,9 +4,7 @@ Actions for invoking sealocs tasks through the CLI.
 
 from pathlib import Path
 
-import sealoc.common.env as env
-
-from sealoc.dal import DB_URL_ENV_KEY
+from sealoc.environment import load_environment
 from sealoc.tasks.download_dataset import (
     DEFAULT_DOWNLOAD_CONFIG,
     DownloadDatasetCommand,
@@ -30,11 +28,11 @@ def dispatch_init_database(
 
     Arguments
     ---------
-    database_url: Database URL string. Falls back to the SEALOC_DB_URL env var.
+    database_url: Database URL string. Falls back to the SEALOC_DATABASE_URL env var.
     clear_database: Whether to drop existing tables before creating new ones.
     """
     command: InitializeDatabaseCommand = InitializeDatabaseCommand(
-        database_url=database_url or env.require(DB_URL_ENV_KEY),
+        database_url=database_url or load_environment().database_url,
         clear_database=clear_database,
     )
     run_init_database(command)
@@ -49,11 +47,11 @@ def dispatch_populate_database(
 
     Arguments
     ---------
-    database_url: Database URL string. Falls back to the SEALOC_DB_URL env var.
+    database_url: Database URL string. Falls back to the SEALOC_DATABASE_URL env var.
     input_dir: Directory containing the camera CSV files.
     """
     command: PopulateDatabaseCommand = PopulateDatabaseCommand(
-        database_url=database_url or env.require(DB_URL_ENV_KEY),
+        database_url=database_url or load_environment().database_url,
         input_dir=input_dir,
     )
     run_populate_database(command)
