@@ -34,6 +34,24 @@ pip install git+https://github.com/sealoc/sealoc.git
 See the [Getting Started guide](docs/01_getting_started.md) for how to download the
 dataset and run your first query.
 
+## Configuration
+
+Create a `.env` file in your project root:
+
+```shell
+SEALOC_DATABASE_URL="sqlite:////absolute/path/to/sealoc.db"
+SEALOC_IMAGE_DIRECTORY="/absolute/path/to/image/directory"  # optional
+SEALOC_CONFIG_FILE="/absolute/path/to/config.toml"          # optional
+```
+
+Load it in your code via `sealoc.environment`:
+
+```python
+from sealoc.environment import Environment, load_environment
+
+environment: Environment = load_environment()
+```
+
 ## Examples
 
 ### Example 1 - Create the data access layer

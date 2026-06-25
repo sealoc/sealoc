@@ -11,10 +11,10 @@ from pathlib import Path
 import sealoc.database as db
 import sealoc.orm as orm
 
+from pydantic import ValidationError
+
 from sealoc.dal import (
     DataAccessLayer,
-    DB_URL_ENV_KEY,
-    IMAGE_DIR_ENV_KEY,
     Repositories,
     create_data_access_layer,
 )
@@ -47,9 +47,9 @@ def test_create_data_access_layer_with_explicit_url(tmp_path: Path) -> None:
 def test_create_data_access_layer_with_env_fallback(
     monkeypatch, tmp_path: Path
 ) -> None:
-    """create_data_access_layer resolves the database URL from SEALOC_DB_URL when no argument is given."""
+    """create_data_access_layer resolves the database URL from SEALOC_DATABASE_URL when no argument is given."""
     url = _make_db(tmp_path)
-    monkeypatch.setenv(DB_URL_ENV_KEY, url)
+    monkeypatch.setenv("SEALOC_DATABASE_URL", url)
 
     dal = create_data_access_layer()
 
@@ -57,11 +57,14 @@ def test_create_data_access_layer_with_env_fallback(
     assert isinstance(dal.engine, db.Engine)
 
 
-def test_create_data_access_layer_raises_without_database(monkeypatch) -> None:
-    """create_data_access_layer raises RuntimeError when no URL is provided and env var is unset."""
-    monkeypatch.delenv(DB_URL_ENV_KEY, raising=False)
+def test_create_data_access_layer_raises_without_database(
+    monkeypatch, tmp_path: Path
+) -> None:
+    """create_data_access_layer raises ValidationError when no URL is provided and env var is unset."""
+    monkeypatch.delenv("SEALOC_DATABASE_URL", raising=False)
+    monkeypatch.chdir(tmp_path)
 
-    with pytest.raises(RuntimeError):
+    with pytest.raises(ValidationError):
         create_data_access_layer()
 
 
@@ -87,13 +90,14 @@ def test_create_data_access_layer_with_image_store(tmp_path: Path) -> None:
 def test_create_data_access_layer_image_store_env_fallback(
     monkeypatch, tmp_path: Path
 ) -> None:
-    """dal.image_store is populated from SEALOC_IMAGE_DIR when image_dir arg is omitted."""
+    """dal.image_store is populated from SEALOC_IMAGE_DIRECTORY when neither image_dir nor database_url args are given."""
     url = _make_db(tmp_path)
     image_dir = tmp_path / "images"
     image_dir.mkdir()
-    monkeypatch.setenv(IMAGE_DIR_ENV_KEY, str(image_dir))
+    monkeypatch.setenv("SEALOC_DATABASE_URL", url)
+    monkeypatch.setenv("SEALOC_IMAGE_DIRECTORY", str(image_dir))
 
-    dal = create_data_access_layer(database_url=url)
+    dal = create_data_access_layer()
 
     assert isinstance(dal.image_store, ImageStore)
 
