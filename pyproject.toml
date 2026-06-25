@@ -47,7 +47,6 @@ package = true
 testpaths = ["tests"]
 
 [tool.mypy]
-python_executable = ".venv/bin/python"
 plugins = ["pydantic.mypy"]
 
 [tool.ruff]
