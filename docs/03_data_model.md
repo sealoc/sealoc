@@ -113,11 +113,11 @@ The `DataAccessLayer` optionally holds an `ImageStore`, which maps `image_label`
 strings to file paths on disk. To load an image for a camera:
 
 ```python
-from sealoc.dal import create_data_access_layer, DataAccessLayer
+from sealoc.dal import load_data_access_layer, DataAccessLayer
 from sealoc.image import Image
 from sealoc.models import Camera, CameraBundle
 
-dal: DataAccessLayer = create_data_access_layer(image_dir="/data/sealoc/sealoc_images_raw")
+dal: DataAccessLayer = load_data_access_layer(image_dir="/data/sealoc/sealoc_images_raw")
 
 with dal.session() as repos:
     bundle: CameraBundle | None = repos.bundles.get_one_by(label="survey_2023")

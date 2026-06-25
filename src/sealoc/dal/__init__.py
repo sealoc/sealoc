@@ -3,5 +3,5 @@
 from .dal import (
     DataAccessLayer as DataAccessLayer,
     Repositories as Repositories,
-    create_data_access_layer as create_data_access_layer,
+    load_data_access_layer as load_data_access_layer,
 )
