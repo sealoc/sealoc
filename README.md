@@ -54,16 +54,12 @@ environment: Environment = load_environment()
 
 ## Examples
 
-### Example 1 - Create the data access layer
+### Example 1 - Load the data access layer
 
 ```python
-from pathlib import Path
-from sealoc.dal import create_data_access_layer, DataAccessLayer
+from sealoc.dal import load_data_access_layer, DataAccessLayer
 
-dal: DataAccessLayer = create_data_access_layer(
-    database_url="sqlite:////data/sealoc/sealoc.db",
-    image_dir=Path("/data/sealoc/sealoc_images_raw"),
-)
+dal: DataAccessLayer = load_data_access_layer()
 ```
 
 ### Example 2 - Load a camera bundle and its groups

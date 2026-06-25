@@ -2,10 +2,7 @@
 
 from __future__ import annotations
 
-import pytest
-
 from pathlib import Path
-from pydantic import ValidationError
 
 from sealoc.environment import Environment, load_environment
 
@@ -20,6 +17,16 @@ def test_load_environment_returns_valid_environment(tmp_path: Path) -> None:
     assert environment.database_url == "sqlite:////data/sealoc.db"
     assert environment.image_directory is None
     assert environment.config_file is None
+
+
+def test_load_environment_without_database_url(tmp_path: Path) -> None:
+    """load_environment() returns an Environment with database_url=None when SEALOC_DATABASE_URL is not set."""
+    env_file: Path = tmp_path / ".env"
+    env_file.write_text("")
+
+    environment: Environment = load_environment(env_file=env_file)
+
+    assert environment.database_url is None
 
 
 def test_load_environment_with_optional_fields(tmp_path: Path) -> None:
@@ -38,12 +45,3 @@ def test_load_environment_with_optional_fields(tmp_path: Path) -> None:
     assert environment.database_url == "sqlite:////data/sealoc.db"
     assert environment.image_directory == image_dir
     assert environment.config_file == config_file
-
-
-def test_load_environment_raises_when_database_url_missing(tmp_path: Path) -> None:
-    """load_environment() raises ValidationError when SEALOC_DATABASE_URL is not set."""
-    env_file: Path = tmp_path / ".env"
-    env_file.write_text("")
-
-    with pytest.raises(ValidationError):
-        load_environment(env_file=env_file)

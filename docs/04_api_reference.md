@@ -2,20 +2,21 @@
 
 ## DataAccessLayer
 
-### `create_data_access_layer`
+### `load_data_access_layer`
 
 ```python
-from sealoc.dal import create_data_access_layer, DataAccessLayer
+from sealoc.dal import load_data_access_layer, DataAccessLayer
 
-dal: DataAccessLayer = create_data_access_layer(
+dal: DataAccessLayer = load_data_access_layer(
     database_url: str | None = None,
     image_dir: str | Path | None = None,
 ) -> DataAccessLayer
 ```
 
-Factory function for creating a `DataAccessLayer`. Pass `database_url` and `image_dir`
-explicitly. Both fall back to environment variables (`SEALOC_DATABASE_URL`, `SEALOC_IMAGE_DIRECTORY`)
-loaded via `sealoc.environment` if not provided, but explicit arguments are recommended.
+Loads a `DataAccessLayer` from the environment. Always calls `load_environment()` and
+resolves `database_url` and `image_dir` from `SEALOC_DATABASE_URL` and
+`SEALOC_IMAGE_DIRECTORY` when not provided explicitly. Raises `ValueError` when no
+database URL is available from either source.
 
 ### `DataAccessLayer.session`
 
@@ -171,7 +172,7 @@ tensor = torch.from_numpy(array)
 ## Full example
 
 ```python
-from sealoc.dal import create_data_access_layer, DataAccessLayer
+from sealoc.dal import load_data_access_layer, DataAccessLayer
 from sealoc.geometry import (
     CameraFootprintIndex,
     CameraPoseIndex,
@@ -181,10 +182,7 @@ from sealoc.geometry import (
 from sealoc.image import Image
 from sealoc.models import Camera, CameraBundle, CameraFootprint, CameraPose
 
-dal: DataAccessLayer = create_data_access_layer(
-    database_url="sqlite:////data/sealoc/sealoc.db",
-    image_dir="/data/sealoc/sealoc_images_raw",
-)
+dal: DataAccessLayer = load_data_access_layer()
 
 with dal.session() as repos:
     bundle: CameraBundle | None = repos.bundles.get_one_by(label="survey_2023")

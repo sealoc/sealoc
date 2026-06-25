@@ -6,23 +6,28 @@ See [Getting Started](01_getting_started.md) if you haven't done that yet.
 
 ## Setting up the data access layer
 
-`create_data_access_layer` is the entry point for all queries. Pass the path to your
-SQLite database and, optionally, the directory containing the unpacked image archives.
+`load_data_access_layer` is the entry point for all queries. The recommended approach
+is to configure a `.env` file and call it with no arguments:
+
+```python
+from sealoc.dal import load_data_access_layer, DataAccessLayer
+
+dal: DataAccessLayer = load_data_access_layer()
+```
+
+This reads `SEALOC_DATABASE_URL` and `SEALOC_IMAGE_DIRECTORY` from the environment via
+`sealoc.environment`. You can override either value by passing it explicitly:
 
 ```python
 from pathlib import Path
 
-from sealoc.dal import create_data_access_layer, DataAccessLayer
-
-dal: DataAccessLayer = create_data_access_layer(
+dal: DataAccessLayer = load_data_access_layer(
     database_url="sqlite:////data/sealoc/sealoc.db",
     image_dir=Path("/data/sealoc/sealoc_images_raw"),
 )
 ```
 
-If you have a `.env` file with `SEALOC_DATABASE_URL` set, you can omit `database_url` and it
-will be picked up automatically via `sealoc.environment`. `image_dir` is always optional — `dal.image_store` will be
-`None` if you skip it.
+`dal.image_store` is `None` when no image directory is available from either source.
 
 All database queries happen inside a `dal.session()` context manager. The session
 commits on success and rolls back on exception.
@@ -129,6 +134,8 @@ optionally to a `CameraPose` and `CameraFootprint`. Use `has_pose()` and
 `has_footprint()` to guard before calling `get_pose()` and `get_footprint()`.
 
 ```python
+import numpy as np
+
 from sealoc.models import Camera, CameraCalibration, CameraFootprint, CameraPose, CameraSensor
 
 camera: Camera = cameras[0]
@@ -137,8 +144,8 @@ sensor: CameraSensor = camera.sensor
 calibration: CameraCalibration = sensor.calibration
 
 # Intrinsics as a 3×3 numpy matrix and a distortion vector [k1, k2, p1, p2, k3]
-K = calibration.intrinsic_matrix
-d = calibration.distortion_vector
+K: np.ndarray = calibration.intrinsic_matrix
+d: np.ndarray = calibration.distortion_vector
 
 if camera.has_pose():
     pose: CameraPose = camera.get_pose()
@@ -302,7 +309,7 @@ distance: float = calculate_pose_distance(query_poses[0], database_poses[0])
 
 ## Loading images
 
-When `image_dir` is provided to `create_data_access_layer`, `dal.image_store` is an
+When `image_dir` is provided to `load_data_access_layer`, `dal.image_store` is an
 `ImageStore` that maps `camera.image_label` to image files on disk. The image label
 is the filename stem of the image (e.g. `"frame_0001"` for `frame_0001.jpg`).
 
@@ -327,7 +334,7 @@ with dal.session() as repos:
 
                 # Convert to NumPy or PyTorch
                 array: np.ndarray = image.to_numpy()
-                tensor = torch.from_numpy(array)
+                tensor: torch.Tensor = torch.from_numpy(array)
 ```
 
 `dal.image_store` is `None` when no image directory was given. `load_image` raises `KeyError`
@@ -342,9 +349,7 @@ group, builds both spatial indices from the database group, then finds matching 
 for every camera in the query group:
 
 ```python
-from pathlib import Path
-
-from sealoc.dal import create_data_access_layer, DataAccessLayer
+from sealoc.dal import load_data_access_layer, DataAccessLayer
 from sealoc.geometry import (
     CameraFootprintIndex,
     CameraFootprintLink,
@@ -355,10 +360,7 @@ from sealoc.geometry import (
 )
 from sealoc.models import Camera, CameraBundle, CameraFootprint, CameraGroup, CameraPose
 
-dal: DataAccessLayer = create_data_access_layer(
-    database_url="sqlite:////data/sealoc/sealoc.db",
-    image_dir=Path("/data/sealoc/sealoc_images_raw"),
-)
+dal: DataAccessLayer = load_data_access_layer()
 
 with dal.session() as repos:
     bundle: CameraBundle = repos.bundles.get_one_by(label="survey_2023")

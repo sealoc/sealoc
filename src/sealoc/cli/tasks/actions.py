@@ -31,8 +31,13 @@ def dispatch_init_database(
     database_url: Database URL string. Falls back to the SEALOC_DATABASE_URL env var.
     clear_database: Whether to drop existing tables before creating new ones.
     """
+    resolved_url: str | None = database_url or load_environment().database_url
+    if resolved_url is None:
+        raise ValueError(
+            "No database URL provided. Pass --database-url explicitly or set SEALOC_DATABASE_URL."
+        )
     command: InitializeDatabaseCommand = InitializeDatabaseCommand(
-        database_url=database_url or load_environment().database_url,
+        database_url=resolved_url,
         clear_database=clear_database,
     )
     run_init_database(command)
@@ -50,8 +55,13 @@ def dispatch_populate_database(
     database_url: Database URL string. Falls back to the SEALOC_DATABASE_URL env var.
     input_dir: Directory containing the camera CSV files.
     """
+    resolved_url: str | None = database_url or load_environment().database_url
+    if resolved_url is None:
+        raise ValueError(
+            "No database URL provided. Pass --database-url explicitly or set SEALOC_DATABASE_URL."
+        )
     command: PopulateDatabaseCommand = PopulateDatabaseCommand(
-        database_url=database_url or load_environment().database_url,
+        database_url=resolved_url,
         input_dir=input_dir,
     )
     run_populate_database(command)
