@@ -49,4 +49,16 @@ def get_orm_tables() -> list[str]:
     return list(sqlm.SQLModel.metadata.tables.keys())
 
 
-__all__ = []
+__all__ = [
+    "CameraBundleRecord",
+    "CameraCalibrationRecord",
+    "CameraFootprintRecord",
+    "CameraGroupRecord",
+    "CameraPoseRecord",
+    "CameraRecord",
+    "CameraSensorRecord",
+    "close_all_sessions",
+    "create_orm_tables",
+    "clear_orm_tables",
+    "get_orm_tables",
+]

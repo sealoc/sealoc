@@ -2,7 +2,7 @@
 
 This page walks through practical examples for querying the SEALOC dataset. All
 examples assume you have already downloaded the dataset and populated the database.
-See [Getting Started](01_getting_started.md) if you haven't done that yet.
+See [Getting Started](getting-started.md) if you haven't done that yet.
 
 ## Setting up the data access layer
 

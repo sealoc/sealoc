@@ -1,0 +1,69 @@
+site_name: SEALOC
+site_description: A benchmark dataset and Python library for long-term visual localization in dynamic benthic environments.
+site_url: https://sealoc.github.io/sealoc/
+repo_url: https://github.com/sealoc/sealoc
+repo_name: sealoc/sealoc
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            # Headings: object name without the internal module path. Callers
+            # import from the package, not the module.
+            show_root_heading: true
+            show_root_full_path: false
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            heading_level: 2
+            # Signatures come from the annotations, not the docstrings.
+            separate_signature: true
+            show_signature_annotations: true
+            signature_crossrefs: true
+            docstring_style: google
+            docstring_section_style: table
+            members_order: source
+            show_source: true
+            show_submodules: false
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Usage: usage.md
+  - Data model: data-model.md
+  - API reference:
+      - dal: api/dal.md
+      - models: api/models.md
+      - geometry: api/geometry.md
+      - image: api/image.md
+      - transforms: api/transforms.md
+      - environment: api/environment.md
+      - database: api/database.md
+      - orm: api/orm.md
