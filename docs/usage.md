@@ -6,7 +6,7 @@ See [Getting Started](getting-started.md) if you haven't done that yet.
 
 ## Setting up the data access layer
 
-[`load_data_access_layer`][sealoc.dal.load_data_access_layer] is the entry point for all queries. The recommended approach
+`load_data_access_layer` is the entry point for all queries. The recommended approach
 is to configure a `.env` file and call it with no arguments:
 
 ```python
@@ -27,21 +27,18 @@ dal: DataAccessLayer = load_data_access_layer(
 )
 ```
 
-!!! note
-    `dal.image_store` is `None` when no image directory is available from either source.
+`dal.image_store` is `None` when no image directory is available from either source.
 
-All database queries happen inside a [`dal.session()`][sealoc.dal.DataAccessLayer.session]
-context manager. The session commits on success and rolls back on exception.
+All database queries happen inside a `dal.session()` context manager. The session
+commits on success and rolls back on exception.
 
 ---
 
 ## Data model hierarchy
 
-[`CameraBundle`][sealoc.models.CameraBundle] is the top-level container. It holds one or
-more [`CameraGroup`][sealoc.models.CameraGroup] objects, each of which holds a set of
-[`Camera`][sealoc.models.Camera] objects. Each camera links to a
-[`CameraSensor`][sealoc.models.CameraSensor] and optionally to a
-[`CameraPose`][sealoc.models.CameraPose] and [`CameraFootprint`][sealoc.models.CameraFootprint].
+`CameraBundle` is the top-level container. It holds one or more `CameraGroup` objects,
+each of which holds a set of `Camera` objects. Each camera links to a `CameraSensor` and
+optionally to a `CameraPose` and `CameraFootprint`.
 
 ```python
 from sealoc.models import (
@@ -133,13 +130,8 @@ with dal.session() as repos:
 ## Accessing sensor, calibration, pose, and footprint
 
 Each `Camera` links to a `CameraSensor` (which carries the `CameraCalibration`), and
-optionally to a `CameraPose` and `CameraFootprint`.
-
-!!! note "Optional poses and footprints"
-    Use [`has_pose()`][sealoc.models.Camera.has_pose] and
-    [`has_footprint()`][sealoc.models.Camera.has_footprint] to guard before calling
-    [`get_pose()`][sealoc.models.Camera.get_pose] and
-    [`get_footprint()`][sealoc.models.Camera.get_footprint].
+optionally to a `CameraPose` and `CameraFootprint`. Use `has_pose()` and
+`has_footprint()` to guard before calling `get_pose()` and `get_footprint()`.
 
 ```python
 import numpy as np
@@ -218,7 +210,7 @@ else:
 
 ## Finding cameras with overlapping footprints
 
-[`CameraFootprintIndex`][sealoc.geometry.CameraFootprintIndex] uses a Shapely STRtree over UTM-projected polygons to find
+`CameraFootprintIndex` uses a Shapely STRtree over UTM-projected polygons to find
 footprints that intersect a query footprint. A typical use case is cross-dive overlap:
 build the index from a reference dive's footprints, then query with footprints from a
 later dive to find the cameras that cover the same ground.
@@ -270,7 +262,7 @@ iou: float = calculate_footprint_iou(query_footprints[0], database_footprints[0]
 
 ## Finding cameras with spatially proximate poses
 
-[`CameraPoseIndex`][sealoc.geometry.CameraPoseIndex] finds all poses within a given distance (in meters) of a query pose.
+`CameraPoseIndex` finds all poses within a given distance (in meters) of a query pose.
 Distances are computed in UTM space, auto-detected from the data. A typical use case is
 cross-dive proximity: build the index from a reference dive's poses, then query with
 poses from a later dive to find cameras that visited the same location.
@@ -318,7 +310,7 @@ distance: float = calculate_pose_distance(query_poses[0], database_poses[0])
 ## Loading images
 
 When `image_dir` is provided to `load_data_access_layer`, `dal.image_store` is an
-[`ImageStore`][sealoc.dal.stores.ImageStore] that maps `camera.image_label` to image files on disk. The image label
+`ImageStore` that maps `camera.image_label` to image files on disk. The image label
 is the filename stem of the image (e.g. `"frame_0001"` for `frame_0001.jpg`).
 
 ```python
@@ -345,11 +337,8 @@ with dal.session() as repos:
                 tensor: torch.Tensor = torch.from_numpy(array)
 ```
 
-!!! warning
-    `dal.image_store` is `None` when no image directory was given.
-    [`load_image`][sealoc.dal.stores.ImageStore.load_image] raises `KeyError` if the
-    label is not found in the store. Use
-    [`has_image`][sealoc.dal.stores.ImageStore.has_image] to guard first.
+`dal.image_store` is `None` when no image directory was given. `load_image` raises `KeyError`
+if the label is not found in the store. Use `has_image` to guard first.
 
 ---
 

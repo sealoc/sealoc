@@ -64,10 +64,6 @@ class ImageStore:
 
         Returns:
             True if the label is present, False otherwise.
-
-        Examples:
-            >>> if dal.image_store.has_image(camera.image_label):
-            ...     image = dal.image_store.load_image(camera.image_label)
         """
         return label in self.image_sources
 
@@ -79,10 +75,6 @@ class ImageStore:
 
         Returns:
             Loaded Image. Raises KeyError if the label is missing.
-
-        Examples:
-            >>> image = dal.image_store.load_image(camera.image_label)
-            >>> array = image.to_numpy()
         """
         image_source: ImageSource | None = self.image_sources.get(label)
         if image_source is None:

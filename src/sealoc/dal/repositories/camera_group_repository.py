@@ -30,10 +30,6 @@ class CameraGroupRepository:
 
         Returns:
             Set of all camera group ids.
-
-        Examples:
-            >>> with dal.session() as repositories:
-            ...     ids = repositories.groups.get_all_ids()
         """
         statement = db.select(orm.CameraGroupRecord.id)
         result = self.session.exec(statement)
@@ -47,10 +43,6 @@ class CameraGroupRepository:
 
         Returns:
             Matching CameraGroup, or None if not found.
-
-        Examples:
-            >>> with dal.session() as repositories:
-            ...     group = repositories.groups.get_by_id(1)
         """
         record: orm.CameraGroupRecord | None = self.session.get(
             orm.CameraGroupRecord, id
@@ -65,10 +57,6 @@ class CameraGroupRepository:
 
         Returns:
             First matching CameraGroup, or None if not found.
-
-        Examples:
-            >>> with dal.session() as repositories:
-            ...     group = repositories.groups.get_one_by(label="dive_01")
         """
         statement = self._build_select_statement(filters)
         result = self.session.exec(statement)
@@ -83,10 +71,6 @@ class CameraGroupRepository:
 
         Returns:
             List of all matching CameraGroup models.
-
-        Examples:
-            >>> with dal.session() as repositories:
-            ...     groups = repositories.groups.get_all_by(label="dive_01")
         """
         statement = self._build_select_statement(filters)
         result = self.session.exec(statement)

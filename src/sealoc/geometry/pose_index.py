@@ -89,9 +89,6 @@ class CameraPoseIndex:
 
         Returns:
             Database poses within max_distance meters of the query pose.
-
-        Examples:
-            >>> neighbors = index.search(query_camera.get_pose(), max_distance=10.0)
         """
         query_transformer: tfs.Transformer = tfs.Transformer.from_crs(
             query_pose.crs,
@@ -123,10 +120,6 @@ class CameraPoseIndex:
 
         Returns:
             Links between the query pose and each proximate database pose.
-
-        Examples:
-            >>> links = index.search_links(query_camera.get_pose(), max_distance=10.0)
-            >>> distances = [link.distance_meters for link in links]
         """
         proximate_poses: list[CameraPose] = self.search(query_pose, max_distance)
         return [
@@ -149,9 +142,6 @@ def create_camera_pose_index(
 
     Returns:
         CameraPoseIndex built from the given poses.
-
-    Examples:
-        >>> index = create_camera_pose_index(database_group.camera_poses)
     """
     if len(camera_poses) == 0:
         raise ValueError("camera_poses must not be empty.")
