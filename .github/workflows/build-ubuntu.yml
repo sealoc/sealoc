@@ -1,4 +1,4 @@
-name: windows
+name: build-ubuntu
 
 on: [push, pull_request]
 
@@ -11,8 +11,9 @@ permissions:
 
 jobs:
   build:
+    name: build-ubuntu (${{ matrix.python-version }})
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false

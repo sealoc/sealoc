@@ -1,4 +1,4 @@
-name: macos
+name: build-macos
 
 on: [push, pull_request]
 
@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   build:
+    name: build-macos (${{ matrix.python-version }})
 
     runs-on: macos-latest
 
