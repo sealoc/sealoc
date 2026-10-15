@@ -1,6 +1,4 @@
-"""
-ORM models for camera bundles, sensors, views, poses, and footprints.
-"""
+"""ORM models for camera bundles, sensors, views, poses, and footprints."""
 
 import textwrap
 
@@ -17,8 +15,7 @@ type Mat3 = tuple[Vec3, Vec3, Vec3]
 
 
 class CameraBundleRecord(sqlm.SQLModel, table=True):
-    """
-    Top-level container for related camera groups in a single project.
+    """Top-level container for related camera groups in a single project.
 
     A bundle does not store cameras or sensors directly; it aggregates
     CameraGroupRecord instances that hold the concrete sensors and views.
@@ -44,12 +41,10 @@ class CameraBundleRecord(sqlm.SQLModel, table=True):
 
     @property
     def cameras(self) -> list["CameraRecord"]:
-        """
-        Return the cameras in the camera groups.
+        """Return the cameras in the camera groups.
 
-        Returns
-        -------
-        All cameras across all camera groups in this bundle.
+        Returns:
+            All cameras across all camera groups in this bundle.
         """
         bundle_cameras: list = list()
         for group in self.camera_groups:
@@ -58,12 +53,10 @@ class CameraBundleRecord(sqlm.SQLModel, table=True):
 
     @property
     def sensors(self) -> list["CameraSensorRecord"]:
-        """
-        Return the sensors in the camera groups.
+        """Return the sensors in the camera groups.
 
-        Returns
-        -------
-        All sensors across all camera groups in this bundle.
+        Returns:
+            All sensors across all camera groups in this bundle.
         """
         bundle_sensors: list = list()
         for group in self.camera_groups:
@@ -72,8 +65,7 @@ class CameraBundleRecord(sqlm.SQLModel, table=True):
 
 
 class CameraGroupRecord(sqlm.SQLModel, table=True):
-    """
-    Group of cameras and sensors that share a common context.
+    """Group of cameras and sensors that share a common context.
 
     Each group belongs to a single CameraBundleRecord and typically represents
     one rig, flight line, or acquisition session.
@@ -104,8 +96,7 @@ class CameraGroupRecord(sqlm.SQLModel, table=True):
 
 
 class CalibrationBaseRecord(sqlm.SQLModel):
-    """
-    Intrinsic camera parameters following OpenCV pinhole + distortion conventions.
+    """Intrinsic camera parameters following OpenCV pinhole + distortion conventions.
 
     Stores image size, focal lengths, principal point, and radial/tangential
     distortion coefficients compatible with cv::calibrateCamera.
@@ -125,9 +116,7 @@ class CalibrationBaseRecord(sqlm.SQLModel):
 
 
 class CameraCalibrationRecord(CalibrationBaseRecord, table=True):
-    """
-    Stored intrinsic calibration for a single camera sensor.
-    """
+    """Stored intrinsic calibration for a single camera sensor."""
 
     id: Optional[int] = sqlm.Field(default=None, primary_key=True)
 
@@ -139,8 +128,7 @@ class CameraCalibrationRecord(CalibrationBaseRecord, table=True):
 
 
 class CameraSensorBaseRecord(sqlm.SQLModel):
-    """
-    Base fields for a camera sensor.
+    """Base fields for a camera sensor.
 
     Represents a physical imaging device with image size and optional
     3D pose (location and rotation).
@@ -164,8 +152,7 @@ class CameraSensorBaseRecord(sqlm.SQLModel):
 
 
 class CameraSensorRecord(CameraSensorBaseRecord, table=True):
-    """
-    Physical camera sensor with intrinsic calibration.
+    """Physical camera sensor with intrinsic calibration.
 
     A sensor can be master or slave in a stereo rig and is linked to one or more
     CameraRecord views captured by this sensor.
@@ -216,9 +203,7 @@ class CameraSensorRecord(CameraSensorBaseRecord, table=True):
     cameras: list["CameraRecord"] = sqlm.Relationship(back_populates="sensor")
 
     def __str__(self) -> str:
-        """
-        Return a short summary including id, label, and calibration.
-        """
+        """Return a short summary including id, label, and calibration."""
         if self.calibration:
             calibration_string = f"{self.calibration.id}"
         else:
@@ -233,9 +218,7 @@ class CameraSensorRecord(CameraSensorBaseRecord, table=True):
 
 
 class CameraBaseRecord(sqlm.SQLModel):
-    """
-    Common metadata fields for a camera view.
-    """
+    """Common metadata fields for a camera view."""
 
     label: str
     image_label: str
@@ -246,8 +229,7 @@ class CameraBaseRecord(sqlm.SQLModel):
 
 
 class CameraRecord(CameraBaseRecord, table=True):
-    """
-    Single camera view (image or frame) in the dataset.
+    """Single camera view (image or frame) in the dataset.
 
     Each view is captured by one CameraSensorRecord and may be part of a
     master–slave camera pair.
@@ -305,8 +287,7 @@ class CameraRecord(CameraBaseRecord, table=True):
 
 
 class CameraPoseRecord(sqlm.SQLModel, table=True):
-    """
-    Georeferenced pose of a camera in a given CRS.
+    """Georeferenced pose of a camera in a given CRS.
 
     Stores camera position (location) in the EPSG CRS given by srid and
     orientation as yaw, pitch, and roll angles.
@@ -327,8 +308,7 @@ class CameraPoseRecord(sqlm.SQLModel, table=True):
 
 
 class CameraFootprintRecord(sqlm.SQLModel, table=True):
-    """
-    Ground footprint of a camera view in a given CRS.
+    """Ground footprint of a camera view in a given CRS.
 
     Stores the projected polygon of the image in the EPSG CRS given by srid.
     """

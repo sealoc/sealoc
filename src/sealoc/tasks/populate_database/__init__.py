@@ -1,6 +1,4 @@
-"""
-Package for tasks for building camera databases.
-"""
+"""Package for tasks for building camera databases."""
 
 from .init import run_init_database as run_init_database
 from .populate import run_populate_database as run_populate_database

@@ -1,6 +1,4 @@
-"""
-Package for downloading the SEALOC dataset.
-"""
+"""Package for downloading the SEALOC dataset."""
 
 from .config import load_download_config as load_download_config
 from .runner import run_download_dataset as run_download_dataset

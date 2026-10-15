@@ -1,6 +1,4 @@
-"""
-Task for downloading the SEALOC dataset.
-"""
+"""Task for downloading the SEALOC dataset."""
 
 from __future__ import annotations
 
@@ -25,12 +23,10 @@ from .types import (
 
 
 def run_download_dataset(command: DownloadDatasetCommand) -> None:
-    """
-    Download the SEALOC dataset into the requested root directory.
+    """Download the SEALOC dataset into the requested root directory.
 
-    Arguments
-    ---------
-    command: Command describing the download URL, destination, and options.
+    Args:
+        command: Command describing the download URL, destination, and options.
     """
     root_dir: Path = command.root_dir
     cache_dir: Path = root_dir / ".cache"
@@ -59,17 +55,14 @@ def run_download_dataset(command: DownloadDatasetCommand) -> None:
 def _filter_entries(
     entries: list[TocEntry], exclude_patterns: list[str]
 ) -> list[TocEntry]:
-    """
-    Filter out entries whose filename matches any exclude pattern.
+    """Filter out entries whose filename matches any exclude pattern.
 
-    Arguments
-    ---------
-    entries: TOC entries to filter.
-    exclude_patterns: Glob patterns to match against filenames.
+    Args:
+        entries: TOC entries to filter.
+        exclude_patterns: Glob patterns to match against filenames.
 
-    Returns
-    -------
-    Entries whose filenames do not match any exclude pattern.
+    Returns:
+        Entries whose filenames do not match any exclude pattern.
     """
     if not exclude_patterns:
         return entries

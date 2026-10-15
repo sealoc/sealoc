@@ -1,6 +1,4 @@
-"""
-Immutable store for image sources and image loading.
-"""
+"""Immutable store for image sources and image loading."""
 
 from collections.abc import (
     Iterable,
@@ -32,63 +30,51 @@ type ImageSource = str | Path
 
 @dataclass(slots=True, frozen=True)
 class ImageStore:
-    """
-    Immutable store mapping image labels to image sources.
+    """Immutable store mapping image labels to image sources.
 
-    Attributes
-    ----------
-    image_sources: Mapping from image label to image source path.
+    Attributes:
+        image_sources: Mapping from image label to image source path.
     """
 
     image_sources: Mapping[ImageLabel, ImageSource] = field(default_factory=dict)
 
     @property
     def image_count(self) -> int:
-        """
-        Return the number of images in the store.
+        """Return the number of images in the store.
 
-        Returns
-        -------
-        Number of images in the store.
+        Returns:
+            Number of images in the store.
         """
         return len(self.image_sources)
 
     @property
     def image_labels(self) -> Iterable[ImageLabel]:
-        """
-        Return the image labels in the store.
+        """Return the image labels in the store.
 
-        Returns
-        -------
-        All image labels in the store.
+        Returns:
+            All image labels in the store.
         """
         return list(self.image_sources.keys())
 
     def has_image(self, label: ImageLabel) -> bool:
-        """
-        Return True if the label exists in the store.
+        """Return True if the label exists in the store.
 
-        Arguments
-        ---------
-        label: Image label to check.
+        Args:
+            label: Image label to check.
 
-        Returns
-        -------
-        True if the label is present, False otherwise.
+        Returns:
+            True if the label is present, False otherwise.
         """
         return label in self.image_sources
 
     def load_image(self, label: ImageLabel) -> Image:
-        """
-        Load the image for the given label.
+        """Load the image for the given label.
 
-        Arguments
-        ---------
-        label: Image label to load.
+        Args:
+            label: Image label to load.
 
-        Returns
-        -------
-        Loaded Image. Raises KeyError if the label is missing.
+        Returns:
+            Loaded Image. Raises KeyError if the label is missing.
         """
         image_source: ImageSource | None = self.image_sources.get(label)
         if image_source is None:
@@ -100,16 +86,13 @@ def create_image_store(
     *,
     image_dir: Path | str,
 ) -> ImageStore:
-    """
-    Create an image store from images in a directory tree.
+    """Create an image store from images in a directory tree.
 
-    Arguments
-    ---------
-    image_dir: Root directory to scan for image files.
+    Args:
+        image_dir: Root directory to scan for image files.
 
-    Returns
-    -------
-    ImageStore populated with all image files found under image_dir.
+    Returns:
+        ImageStore populated with all image files found under image_dir.
     """
     image_sources: dict[ImageLabel, ImageSource] = _build_image_mapping_from_dir(
         image_dir
@@ -120,16 +103,13 @@ def create_image_store(
 def _build_image_mapping_from_dir(
     directory: Path | str,
 ) -> dict[ImageLabel, ImageSource]:
-    """
-    Build a label-to-source mapping from images in a directory tree.
+    """Build a label-to-source mapping from images in a directory tree.
 
-    Arguments
-    ---------
-    directory: Root directory to scan recursively for image files.
+    Args:
+        directory: Root directory to scan recursively for image files.
 
-    Returns
-    -------
-    Mapping from image stem (label) to absolute image path.
+    Returns:
+        Mapping from image stem (label) to absolute image path.
     """
     directory = Path(directory)
     if not directory.is_dir():

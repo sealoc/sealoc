@@ -1,5 +1,4 @@
-"""
-Package for image types and image I/O.
+"""Package for image types and image I/O.
 
 This package provides a lightweight Image value type along with helpers
 for reading and writing images using imageio.

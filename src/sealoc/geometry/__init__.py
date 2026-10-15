@@ -1,5 +1,5 @@
-"""
-Package for processing camera poses and footprints.
+"""Package for processing camera poses and footprints.
+
 The package includes indices for finding overlapping camera footprints and spatially
 proximate camera poses, along with link types and metric functions.
 """

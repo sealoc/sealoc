@@ -1,5 +1,4 @@
-"""
-Event handlers for validating camera master–slave consistency.
+"""Event handlers for validating camera master–slave consistency.
 
 Checks that master–slave relationships between CameraRecord instances
 match the corresponding relationships between their CameraSensorRecord
@@ -27,18 +26,16 @@ def validate_master_camera_sensor(
     flush_context: Any,
     instances: Sequence[Any],
 ) -> None:
-    """
-    Ensure camera and sensor master–slave relationships are consistent before flush.
+    """Ensure master–slave relationships are consistent before flush.
 
     For each CameraRecord with a master_camera, verifies that both cameras have sensors
     and that the master's sensor is the master of the slave's sensor. Raises ValueError
     if the invariant is violated.
 
-    Arguments
-    ---------
-    session: The database session being flushed.
-    flush_context: SQLAlchemy flush context (unused).
-    instances: Instances passed to the flush (unused).
+    Args:
+        session: The database session being flushed.
+        flush_context: SQLAlchemy flush context (unused).
+        instances: Instances passed to the flush (unused).
     """
     # Only validate new/dirty CameraRecord objects
     to_check: list[Any] = list(session.new) + list(session.dirty)

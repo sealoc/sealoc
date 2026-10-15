@@ -1,6 +1,4 @@
-"""
-Package for rotations, rigid-body, and coordinate reference system transforms.
-"""
+"""Package for rotations, rigid-body, and coordinate reference system transforms."""
 
 from .transforms import (
     CRS as CRS,

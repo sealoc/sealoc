@@ -1,6 +1,4 @@
-"""
-Module for Initializing a database with ORM tables.
-"""
+"""Module for Initializing a database with ORM tables."""
 
 import sealoc.database as db
 import sealoc.orm as orm
@@ -11,12 +9,10 @@ from .types import InitializeDatabaseCommand
 
 
 def run_init_database(command: InitializeDatabaseCommand) -> None:
-    """
-    Initialize a database by creating tables for ORM models.
+    """Initialize a database by creating tables for ORM models.
 
-    Arguments
-    ---------
-    command: Command containing the database URL and clear flag.
+    Args:
+        command: Command containing the database URL and clear flag.
     """
     engine: db.Engine = db.create_engine(url=command.database_url)
 

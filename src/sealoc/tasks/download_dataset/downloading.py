@@ -1,6 +1,4 @@
-"""
-Module for downloading files.
-"""
+"""Module for downloading files."""
 
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -25,13 +23,11 @@ def run_downloads(
     jobs: list[DownloadJob],
     max_workers: int = 4,
 ) -> None:
-    """
-    Download all pending jobs concurrently with a progress display.
+    """Download all pending jobs concurrently with a progress display.
 
-    Arguments
-    ---------
-    jobs: Download jobs to execute.
-    max_workers: Maximum number of concurrent download threads.
+    Args:
+        jobs: Download jobs to execute.
+        max_workers: Maximum number of concurrent download threads.
     """
     console = Console()
 
@@ -61,14 +57,12 @@ def _download_job(
     progress: Progress,
     job: DownloadJob,
 ) -> None:
-    """
-    Download one file, update its progress bar, then move to target and run on_complete.
+    """Download one file, update its progress bar, then move it and run on_complete.
 
-    Arguments
-    ---------
-    client: Shared HTTP client to use for the download.
-    progress: Rich Progress instance to update during download.
-    job: Download job describing the source URL and target path.
+    Args:
+        client: Shared HTTP client to use for the download.
+        progress: Rich Progress instance to update during download.
+        job: Download job describing the source URL and target path.
     """
     label = Path(job.entry.filename).name
 
