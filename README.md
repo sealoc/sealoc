@@ -1,8 +1,8 @@
 # SEALOC - A Benchmark Dataset for Long-Term Visual Localization in Dynamic Benthic Environments
 
-![ubuntu](https://github.com/sealoc/sealoc/actions/workflows/ubuntu.yml/badge.svg)
-![windows](https://github.com/sealoc/sealoc/actions/workflows/windows.yml/badge.svg)
-![macos](https://github.com/sealoc/sealoc/actions/workflows/macos.yml/badge.svg)
+![build-ubuntu](https://github.com/sealoc/sealoc/actions/workflows/build-ubuntu.yml/badge.svg)
+![build-windows](https://github.com/sealoc/sealoc/actions/workflows/build-windows.yml/badge.svg)
+![build-macos](https://github.com/sealoc/sealoc/actions/workflows/build-macos.yml/badge.svg)
 [![Dataset](https://img.shields.io/badge/Dataset-10.11582%2F2026.QRO1LF3Z-blue)](https://doi.org/10.11582/2026.QRO1LF3Z)
 [![Paper](https://img.shields.io/badge/Paper-10.3389%2Ffrobt.2026.1821019-blue)](https://doi.org/10.3389/frobt.2026.1821019)
 

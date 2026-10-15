@@ -1,9 +1,9 @@
-name: ubuntu
+name: build-macos
 
 on: [push, pull_request]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 permissions:
@@ -11,8 +11,9 @@ permissions:
 
 jobs:
   build:
+    name: build-macos (${{ matrix.python-version }})
 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     strategy:
       fail-fast: false
