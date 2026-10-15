@@ -1,7 +1,4 @@
-"""
-Data Access Layer providing a unified interface to camera model repositories
-and image stores.
-"""
+"""Data Access Layer providing a unified interface to repositories and image stores."""
 
 from collections.abc import Generator
 from contextlib import contextmanager
@@ -24,13 +21,11 @@ from .stores import (
 
 @dataclass(slots=True, frozen=True)
 class Repositories:
-    """
-    All camera model repositories for a single database session.
+    """All camera model repositories for a single database session.
 
-    Attributes
-    ----------
-    bundles: Camera bundle repository.
-    groups: Camera group repository.
+    Attributes:
+        bundles: Camera bundle repository.
+        groups: Camera group repository.
     """
 
     bundles: CameraBundleRepository
@@ -39,17 +34,15 @@ class Repositories:
 
 @dataclass(slots=True, frozen=True)
 class DataAccessLayer:
-    """
-    Unified access point for SEALOC data sources.
+    """Unified access point for SEALOC data sources.
 
     Holds a database engine and an optional image store. Repositories are
     accessed within a session scope via `dal.session()`. Use `load_data_access_layer`
     to construct an instance.
 
-    Attributes
-    ----------
-    engine: Database engine used for all sessions.
-    image_store: Optional image store mapping labels to source paths.
+    Attributes:
+        engine: Database engine used for all sessions.
+        image_store: Optional image store mapping labels to source paths.
     """
 
     engine: db.Engine
@@ -57,15 +50,13 @@ class DataAccessLayer:
 
     @contextmanager
     def session(self) -> Generator[Repositories, None, None]:
-        """
-        Open a database session and yield all camera model repositories.
+        """Open a database session and yield all camera model repositories.
 
         Commits on success and rolls back on exception, consistent with
         `db.session_scope`.
 
-        Yields
-        ------
-        All camera model repositories bound to the open session.
+        Yields:
+            All camera model repositories bound to the open session.
         """
         with db.session_scope(self.engine) as session:
             yield Repositories(
@@ -78,20 +69,17 @@ def load_data_access_layer(
     database_url: str | None = None,
     image_dir: Path | str | None = None,
 ) -> DataAccessLayer:
-    """
-    Load a DataAccessLayer from the environment and optional overrides.
+    """Load a DataAccessLayer from the environment and optional overrides.
 
-    Arguments
-    ---------
-    database_url: Database URL string. Overrides `SEALOC_DATABASE_URL` from the
-        environment when provided. Raises `ValueError` if neither is available.
-    image_dir: Path to the image directory. Overrides `SEALOC_IMAGE_DIRECTORY` from
-        the environment when provided. `dal.image_store` will be `None` when neither
-        is available.
+    Args:
+        database_url: Database URL string. Overrides `SEALOC_DATABASE_URL` from the
+            environment when provided. Raises `ValueError` if neither is available.
+        image_dir: Path to the image directory. Overrides `SEALOC_IMAGE_DIRECTORY` from
+            the environment when provided. `dal.image_store` will be `None` when neither
+            is available.
 
-    Returns
-    -------
-    Configured DataAccessLayer instance.
+    Returns:
+        Configured DataAccessLayer instance.
     """
     environment: Environment = load_environment()
     resolved_url: str | None = database_url or environment.database_url

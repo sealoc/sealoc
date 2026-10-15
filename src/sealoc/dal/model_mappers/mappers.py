@@ -1,6 +1,4 @@
-"""
-Module for mapping ORM models to domain models.
-"""
+"""Module for mapping ORM models to domain models."""
 
 import functools
 import typing
@@ -11,32 +9,26 @@ import sealoc.models as models
 
 @functools.singledispatch
 def to_model(record: typing.Any) -> typing.Any:
-    """
-    Map an ORM record to its corresponding domain model.
+    """Map an ORM record to its corresponding domain model.
 
-    Arguments
-    ---------
-    record: ORM record to map.
+    Args:
+        record: ORM record to map.
 
-    Returns
-    -------
-    Domain model corresponding to the record type.
+    Returns:
+        Domain model corresponding to the record type.
     """
     raise NotImplementedError(f"No model mapping for type {type(record)}")
 
 
 @to_model.register
 def _(record: orm.CameraBundleRecord) -> models.CameraBundle:
-    """
-    Convert a camera bundle record to a camera bundle model.
+    """Convert a camera bundle record to a camera bundle model.
 
-    Arguments
-    ---------
-    record: Camera bundle ORM record.
+    Args:
+        record: Camera bundle ORM record.
 
-    Returns
-    -------
-    Mapped CameraBundle domain model.
+    Returns:
+        Mapped CameraBundle domain model.
     """
     groups: list[models.CameraGroup] = [
         to_model(group) for group in record.camera_groups
@@ -49,16 +41,13 @@ def _(record: orm.CameraBundleRecord) -> models.CameraBundle:
 
 @to_model.register
 def _(record: orm.CameraGroupRecord) -> models.CameraGroup:
-    """
-    Convert a camera group record to a camera group model.
+    """Convert a camera group record to a camera group model.
 
-    Arguments
-    ---------
-    record: Camera group ORM record.
+    Args:
+        record: Camera group ORM record.
 
-    Returns
-    -------
-    Mapped CameraGroup domain model.
+    Returns:
+        Mapped CameraGroup domain model.
     """
     group: models.CameraGroup = models.CameraGroup(**record.model_dump())
 
@@ -98,17 +87,15 @@ def _hydrate_camera_relationships(
     cameras: list[models.Camera],
     sensors: list[models.CameraSensor],
 ) -> None:
-    """
-    Rewire cameras and sensors to shared instances.
+    """Rewire cameras and sensors to shared instances.
 
     Ensures all cameras use canonical sensor objects from sensors and that
     master–slave links between cameras and sensors point to these shared
     instances, raising ValueError if a referenced object is missing.
 
-    Arguments
-    ---------
-    cameras: List of camera domain models to rewire.
-    sensors: List of camera sensor domain models to use as canonical instances.
+    Args:
+        cameras: List of camera domain models to rewire.
+        sensors: List of camera sensor domain models to use as canonical instances.
     """
     sensor_map: dict[int, models.CameraSensor] = {
         sensor.id: sensor for sensor in sensors
@@ -148,13 +135,11 @@ def _assign_poses_to_cameras(
     cameras: list[models.Camera],
     camera_poses: list[models.CameraPose],
 ) -> None:
-    """
-    Assign poses to cameras by matching on camera id.
+    """Assign poses to cameras by matching on camera id.
 
-    Arguments
-    ---------
-    cameras: Camera domain models to assign poses to.
-    camera_poses: Poses to assign.
+    Args:
+        cameras: Camera domain models to assign poses to.
+        camera_poses: Poses to assign.
     """
     pose_map: dict[int, models.CameraPose] = {
         pose.camera_id: pose for pose in camera_poses
@@ -169,13 +154,11 @@ def _assign_footprints_to_cameras(
     cameras: list[models.Camera],
     camera_footprints: list[models.CameraFootprint],
 ) -> None:
-    """
-    Assign footprints to cameras by matching on camera id.
+    """Assign footprints to cameras by matching on camera id.
 
-    Arguments
-    ---------
-    cameras: Camera domain models to assign footprints to.
-    camera_footprints: Footprints to assign.
+    Args:
+        cameras: Camera domain models to assign footprints to.
+        camera_footprints: Footprints to assign.
     """
     footprint_map: dict[int, models.CameraFootprint] = {
         footprint.camera_id: footprint for footprint in camera_footprints
@@ -188,16 +171,13 @@ def _assign_footprints_to_cameras(
 
 @to_model.register
 def _(calibration_record: orm.CameraCalibrationRecord) -> models.CameraCalibration:
-    """
-    Convert a camera calibration record to a camera calibration model.
+    """Convert a camera calibration record to a camera calibration model.
 
-    Arguments
-    ---------
-    calibration_record: Camera calibration ORM record.
+    Args:
+        calibration_record: Camera calibration ORM record.
 
-    Returns
-    -------
-    Mapped CameraCalibration domain model.
+    Returns:
+        Mapped CameraCalibration domain model.
     """
     data: dict = calibration_record.model_dump(exclude={"sensor"})
     return models.CameraCalibration.model_validate(data)
@@ -205,16 +185,13 @@ def _(calibration_record: orm.CameraCalibrationRecord) -> models.CameraCalibrati
 
 @to_model.register
 def _(sensor_record: orm.CameraSensorRecord) -> models.CameraSensor:
-    """
-    Convert a camera sensor record to a camera sensor model.
+    """Convert a camera sensor record to a camera sensor model.
 
-    Arguments
-    ---------
-    sensor_record: Camera sensor ORM record.
+    Args:
+        sensor_record: Camera sensor ORM record.
 
-    Returns
-    -------
-    Mapped CameraSensor domain model.
+    Returns:
+        Mapped CameraSensor domain model.
     """
     fields: dict = sensor_record.model_dump(
         exclude={"calibration", "camera_group", "location", "rotation"}
@@ -238,16 +215,13 @@ def _(sensor_record: orm.CameraSensorRecord) -> models.CameraSensor:
 def _convert_sensor_location(
     location: tuple[float, float, float] | None,
 ) -> tuple[float, float, float]:
-    """
-    Convert a sensor location to a 3-tuple, defaulting to origin if None.
+    """Convert a sensor location to a 3-tuple, defaulting to origin if None.
 
-    Arguments
-    ---------
-    location: XYZ location tuple, or None.
+    Args:
+        location: XYZ location tuple, or None.
 
-    Returns
-    -------
-    Location as a 3-tuple of floats, or (0.0, 0.0, 0.0) if None.
+    Returns:
+        Location as a 3-tuple of floats, or (0.0, 0.0, 0.0) if None.
     """
     if location is None:
         return (0.0, 0.0, 0.0)
@@ -264,16 +238,13 @@ def _convert_sensor_rotation(
 ) -> tuple[
     tuple[float, float, float], tuple[float, float, float], tuple[float, float, float]
 ]:
-    """
-    Convert a sensor rotation to nested 3-tuples, defaulting to identity if None.
+    """Convert a sensor rotation to nested 3-tuples, defaulting to identity if None.
 
-    Arguments
-    ---------
-    rotation: 3x3 rotation matrix as nested tuples, or None.
+    Args:
+        rotation: 3x3 rotation matrix as nested tuples, or None.
 
-    Returns
-    -------
-    Rotation as nested 3-tuples of floats, or the identity matrix if None.
+    Returns:
+        Rotation as nested 3-tuples of floats, or the identity matrix if None.
     """
     if rotation is None:
         return ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0))
@@ -286,16 +257,13 @@ def _convert_sensor_rotation(
 
 @to_model.register
 def _(camera_record: orm.CameraRecord) -> models.Camera:
-    """
-    Convert a camera record to a camera model.
+    """Convert a camera record to a camera model.
 
-    Arguments
-    ---------
-    camera_record: Camera ORM record.
+    Args:
+        camera_record: Camera ORM record.
 
-    Returns
-    -------
-    Mapped Camera domain model.
+    Returns:
+        Mapped Camera domain model.
     """
     fields: dict = camera_record.model_dump(exclude={"camera_sensor", "camera_group"})
 
@@ -311,16 +279,13 @@ def _(camera_record: orm.CameraRecord) -> models.Camera:
 
 @to_model.register
 def _(camera_pose_record: orm.CameraPoseRecord) -> models.CameraPose:
-    """
-    Convert a camera pose record to a camera pose model.
+    """Convert a camera pose record to a camera pose model.
 
-    Arguments
-    ---------
-    camera_pose_record: Camera pose ORM record.
+    Args:
+        camera_pose_record: Camera pose ORM record.
 
-    Returns
-    -------
-    Mapped CameraPose domain model.
+    Returns:
+        Mapped CameraPose domain model.
     """
     return models.CameraPose(
         camera_id=camera_pose_record.camera_id,
@@ -334,16 +299,13 @@ def _(camera_pose_record: orm.CameraPoseRecord) -> models.CameraPose:
 
 @to_model.register
 def _(camera_footprint_record: orm.CameraFootprintRecord) -> models.CameraFootprint:
-    """
-    Convert a camera footprint record to a camera footprint model.
+    """Convert a camera footprint record to a camera footprint model.
 
-    Arguments
-    ---------
-    camera_footprint_record: Camera footprint ORM record.
+    Args:
+        camera_footprint_record: Camera footprint ORM record.
 
-    Returns
-    -------
-    Mapped CameraFootprint domain model.
+    Returns:
+        Mapped CameraFootprint domain model.
     """
     return models.CameraFootprint(
         camera_id=camera_footprint_record.camera_id,

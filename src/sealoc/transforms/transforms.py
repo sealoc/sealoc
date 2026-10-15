@@ -20,16 +20,13 @@ from .constants import (
 
 
 def estimate_utm_crs(points: list[shapely.Point]) -> CRS:
-    """
-    Estimate the UTM CRS from a collection of WGS84 points.
+    """Estimate the UTM CRS from a collection of WGS84 points.
 
-    Arguments
-    ---------
-    points: WGS84 points (longitude, latitude) to estimate the UTM zone from.
+    Args:
+        points: WGS84 points (longitude, latitude) to estimate the UTM zone from.
 
-    Returns
-    -------
-    UTM CRS for the zone covering the centroid of the input points.
+    Returns:
+        UTM CRS for the zone covering the centroid of the input points.
     """
     for point in points:
         assert (

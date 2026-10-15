@@ -1,6 +1,4 @@
-"""
-Module with builder functions.
-"""
+"""Module with builder functions."""
 
 import pandas as pd  # type: ignore[import-untyped]
 
@@ -18,17 +16,14 @@ from .types import (
 def build_records_from_tables(
     session: db.Session, tables: CameraDataTables
 ) -> PopulateDatabaseState:
-    """
-    Build and persist all camera ORM records from the given data tables.
+    """Build and persist all camera ORM records from the given data tables.
 
-    Arguments
-    ---------
-    session: Database session to add records to.
-    tables: Camera data tables loaded from CSV files.
+    Args:
+        session: Database session to add records to.
+        tables: Camera data tables loaded from CSV files.
 
-    Returns
-    -------
-    PopulateDatabaseState containing all built records.
+    Returns:
+        PopulateDatabaseState containing all built records.
     """
     state: PopulateDatabaseState = PopulateDatabaseState()
     summary: list[str] = list()
@@ -107,13 +102,11 @@ def _build_camera_bundles(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Build camera bundle records from the table data.
+    """Build camera bundle records from the table data.
 
-    Arguments
-    ---------
-    state: State object to append the built records to.
-    tables: Camera data tables containing bundle rows.
+    Args:
+        state: State object to append the built records to.
+        tables: Camera data tables containing bundle rows.
     """
     required_columns: set[str] = {"camera_bundle_id", "camera_bundle_label", "meta"}
     if not required_columns.issubset(tables.camera_bundles.columns):
@@ -132,13 +125,11 @@ def _build_camera_groups(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Build camera group records from the table data.
+    """Build camera group records from the table data.
 
-    Arguments
-    ---------
-    state: State object to append the built records to.
-    tables: Camera data tables containing group rows.
+    Args:
+        state: State object to append the built records to.
+        tables: Camera data tables containing group rows.
     """
     required_columns: set[str] = {"camera_group_id", "camera_group_label", "meta"}
     if not required_columns.issubset(tables.camera_groups.columns):
@@ -157,13 +148,11 @@ def _build_camera_calibrations(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Build camera calibration records from table rows.
+    """Build camera calibration records from table rows.
 
-    Arguments
-    ---------
-    state: State object to append the built records to.
-    tables: Camera data tables containing calibration rows.
+    Args:
+        state: State object to append the built records to.
+        tables: Camera data tables containing calibration rows.
     """
     required_columns: set[str] = {
         "calibration_id",
@@ -207,13 +196,11 @@ def _build_camera_sensors(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Build camera sensor records from table rows.
+    """Build camera sensor records from table rows.
 
-    Arguments
-    ---------
-    state: State object to append the built records to.
-    tables: Camera data tables containing sensor rows.
+    Args:
+        state: State object to append the built records to.
+        tables: Camera data tables containing sensor rows.
     """
     required_columns: set[str] = {
         "sensor_id",
@@ -244,13 +231,11 @@ def _build_cameras(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Build camera records from table rows.
+    """Build camera records from table rows.
 
-    Arguments
-    ---------
-    state: State object to append the built records to.
-    tables: Camera data tables containing camera rows.
+    Args:
+        state: State object to append the built records to.
+        tables: Camera data tables containing camera rows.
     """
     required_columns: set[str] = {
         "camera_id",
@@ -277,13 +262,11 @@ def _build_camera_poses(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Build camera pose records from table rows.
+    """Build camera pose records from table rows.
 
-    Arguments
-    ---------
-    state: State object to append the built records to.
-    tables: Camera data tables containing pose rows.
+    Args:
+        state: State object to append the built records to.
+        tables: Camera data tables containing pose rows.
     """
     required_columns: set[str] = {
         "camera_id",
@@ -316,13 +299,11 @@ def _build_camera_footprints(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Build camera footprint records from table rows.
+    """Build camera footprint records from table rows.
 
-    Arguments
-    ---------
-    state: State object to append the built records to.
-    tables: Camera data tables containing footprint rows.
+    Args:
+        state: State object to append the built records to.
+        tables: Camera data tables containing footprint rows.
     """
     required_columns: set[str] = {
         "camera_id",
@@ -348,13 +329,11 @@ def _relate_groups_to_bundles(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Relate camera groups to their parent camera bundles.
+    """Relate camera groups to their parent camera bundles.
 
-    Arguments
-    ---------
-    state: State containing the built bundle and group records.
-    tables: Camera data tables containing group-to-bundle mappings.
+    Args:
+        state: State containing the built bundle and group records.
+        tables: Camera data tables containing group-to-bundle mappings.
     """
     camera_bundle_map: dict[int, orm.CameraBundleRecord] = {
         bundle.id: bundle for bundle in state.camera_bundles if bundle.id is not None
@@ -389,13 +368,11 @@ def _relate_sensors_to_groups(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Relate camera sensors to their parent camera groups.
+    """Relate camera sensors to their parent camera groups.
 
-    Arguments
-    ---------
-    state: State containing the built sensor and group records.
-    tables: Camera data tables containing sensor-to-group mappings.
+    Args:
+        state: State containing the built sensor and group records.
+        tables: Camera data tables containing sensor-to-group mappings.
     """
     camera_sensor_map: dict[int, orm.CameraSensorRecord] = {
         sensor.id: sensor for sensor in state.camera_sensors if sensor.id is not None
@@ -430,13 +407,11 @@ def _relate_cameras_to_groups(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Relate cameras to their parent camera groups.
+    """Relate cameras to their parent camera groups.
 
-    Arguments
-    ---------
-    state: State containing the built camera and group records.
-    tables: Camera data tables containing camera-to-group mappings.
+    Args:
+        state: State containing the built camera and group records.
+        tables: Camera data tables containing camera-to-group mappings.
     """
     camera_map: dict[int, orm.CameraRecord] = {
         camera.id: camera for camera in state.cameras if camera.id is not None
@@ -471,13 +446,11 @@ def _relate_cameras_to_sensors(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Relate cameras to their camera sensors.
+    """Relate cameras to their camera sensors.
 
-    Arguments
-    ---------
-    state: State containing the built camera and sensor records.
-    tables: Camera data tables containing camera-to-sensor mappings.
+    Args:
+        state: State containing the built camera and sensor records.
+        tables: Camera data tables containing camera-to-sensor mappings.
     """
     camera_map: dict[int, orm.CameraRecord] = {
         camera.id: camera for camera in state.cameras if camera.id is not None
@@ -513,13 +486,11 @@ def _relate_sensors_to_calibrations(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Relate camera sensors to their calibrations.
+    """Relate camera sensors to their calibrations.
 
-    Arguments
-    ---------
-    state: State containing the built sensor and calibration records.
-    tables: Camera data tables containing sensor-to-calibration mappings.
+    Args:
+        state: State containing the built sensor and calibration records.
+        tables: Camera data tables containing sensor-to-calibration mappings.
     """
     sensor_map: dict[int, orm.CameraSensorRecord] = state.get_sensor_map()
     calibration_map: dict[int, orm.CameraCalibrationRecord] = (
@@ -551,13 +522,11 @@ def _relate_sensors_to_sensors(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Relate slave camera sensors to their master sensors.
+    """Relate slave camera sensors to their master sensors.
 
-    Arguments
-    ---------
-    state: State containing the built sensor records.
-    tables: Camera data tables containing master-slave sensor mappings.
+    Args:
+        state: State containing the built sensor records.
+        tables: Camera data tables containing master-slave sensor mappings.
     """
     sensor_map: dict[int, orm.CameraSensorRecord] = state.get_sensor_map()
 
@@ -584,13 +553,11 @@ def _relate_cameras_to_cameras(
     state: PopulateDatabaseState,
     tables: CameraDataTables,
 ) -> None:
-    """
-    Relate slave cameras to their master cameras.
+    """Relate slave cameras to their master cameras.
 
-    Arguments
-    ---------
-    state: State containing the built camera records.
-    tables: Camera data tables containing master-slave camera mappings.
+    Args:
+        state: State containing the built camera records.
+        tables: Camera data tables containing master-slave camera mappings.
     """
     camera_map: dict[int, orm.CameraRecord] = state.get_camera_map()
 

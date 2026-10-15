@@ -1,6 +1,4 @@
-"""
-Package for sealocs database functionality.
-"""
+"""Package for sealocs database functionality."""
 
 from .common import (
     create_engine as create_engine,

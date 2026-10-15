@@ -1,6 +1,4 @@
-"""
-Module for downloading and parsing the SEALOC dataset contents.
-"""
+"""Module for downloading and parsing the SEALOC dataset contents."""
 
 from __future__ import annotations
 
@@ -18,17 +16,14 @@ from .types import TocEntry
 
 
 def download_table_of_contents(url: str, output_path: Path) -> Path:
-    """
-    Download a table-of-contents file from a URL to the provided path.
+    """Download a table-of-contents file from a URL to the provided path.
 
-    Arguments
-    ---------
-    url: HTTP or HTTPS URL of the table-of-contents CSV.
-    output_path: Local path to write the downloaded file to.
+    Args:
+        url: HTTP or HTTPS URL of the table-of-contents CSV.
+        output_path: Local path to write the downloaded file to.
 
-    Returns
-    -------
-    Resolved path of the downloaded file.
+    Returns:
+        Resolved path of the downloaded file.
     """
     validated_url: str = _validate_url(url)
 
@@ -53,16 +48,13 @@ def download_table_of_contents(url: str, output_path: Path) -> Path:
 
 
 def _validate_url(url: str) -> str:
-    """
-    Validate that the provided URL is a well-formed HTTP or HTTPS URL.
+    """Validate that the provided URL is a well-formed HTTP or HTTPS URL.
 
-    Arguments
-    ---------
-    url: URL string to validate.
+    Args:
+        url: URL string to validate.
 
-    Returns
-    -------
-    Validated URL string.
+    Returns:
+        Validated URL string.
     """
     try:
         return str(TypeAdapter(AnyHttpUrl).validate_python(url))
@@ -71,16 +63,13 @@ def _validate_url(url: str) -> str:
 
 
 def read_table_of_contents(path: Path) -> pd.DataFrame:
-    """
-    Read a table-of-contents CSV file into a data frame.
+    """Read a table-of-contents CSV file into a data frame.
 
-    Arguments
-    ---------
-    path: Path to the table-of-contents CSV file.
+    Args:
+        path: Path to the table-of-contents CSV file.
 
-    Returns
-    -------
-    Cleaned and normalized data frame of TOC entries.
+    Returns:
+        Cleaned and normalized data frame of TOC entries.
     """
     data_frame: pd.DataFrame = pd.read_csv(path, delimiter="|")
 
@@ -118,16 +107,14 @@ def read_table_of_contents(path: Path) -> pd.DataFrame:
 
 
 def parse_table_of_contents(frame: pd.DataFrame) -> list[TocEntry]:
-    """
-    Parse the rows in a data frame as TOC entries.
+    """Parse the rows in a data frame as TOC entries.
 
-    Arguments
-    ---------
-    frame: Data frame with columns url, filename, size_bytes, modified_date, fixity_md5.
+    Args:
+        frame: Data frame with columns url, filename, size_bytes, modified_date,
+            fixity_md5.
 
-    Returns
-    -------
-    List of parsed TocEntry objects.
+    Returns:
+        List of parsed TocEntry objects.
     """
     entries: list[TocEntry] = []
     for _, row in frame.iterrows():

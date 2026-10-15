@@ -1,6 +1,4 @@
-"""
-Package for sealoc data models.
-"""
+"""Package for sealoc data models."""
 
 from .camera_models import (
     Camera as Camera,

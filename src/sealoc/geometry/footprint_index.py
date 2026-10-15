@@ -17,14 +17,12 @@ from .types import CameraFootprintLink
 
 @dataclasses.dataclass(frozen=True)
 class CameraFootprintIndex:
-    """
-    Spatial index for finding cameras with overlapping footprints.
+    """Spatial index for finding cameras with overlapping footprints.
 
-    Attributes
-    ----------
-    database_footprints: Footprints stored in the index.
-    database_transformer: Transformer used to project footprints into the index CRS.
-    database_tree: STRtree of projected footprint polygons.
+    Attributes:
+        database_footprints: Footprints stored in the index.
+        database_transformer: Transformer used to project footprints into the index CRS.
+        database_tree: STRtree of projected footprint polygons.
     """
 
     database_footprints: list[CameraFootprint]
@@ -38,12 +36,10 @@ class CameraFootprintIndex:
 
     @property
     def source_crs(self) -> tfs.CRS:
-        """
-        Source CRS of the database transformer.
+        """Source CRS of the database transformer.
 
-        Returns
-        -------
-        Source CRS used when projecting database footprints.
+        Returns:
+            Source CRS used when projecting database footprints.
         """
         crs = self.database_transformer.source_crs
         assert crs is not None
@@ -51,12 +47,10 @@ class CameraFootprintIndex:
 
     @property
     def target_crs(self) -> tfs.CRS:
-        """
-        Target CRS of the database transformer.
+        """Target CRS of the database transformer.
 
-        Returns
-        -------
-        Target CRS (UTM) used for spatial querying.
+        Returns:
+            Target CRS (UTM) used for spatial querying.
         """
         crs = self.database_transformer.target_crs
         assert crs is not None
@@ -64,12 +58,10 @@ class CameraFootprintIndex:
 
     @property
     def database_polygons(self) -> list[shapely.Polygon]:
-        """
-        Polygons stored in the database tree.
+        """Polygons stored in the database tree.
 
-        Returns
-        -------
-        List of projected footprint polygons in the index.
+        Returns:
+            List of projected footprint polygons in the index.
         """
         return list(self.database_tree.geometries)
 
@@ -77,16 +69,13 @@ class CameraFootprintIndex:
         self,
         query_footprint: CameraFootprint,
     ) -> list[CameraFootprint]:
-        """
-        Search for database cameras whose footprint intersects the query footprint.
+        """Search for database cameras whose footprint intersects the query footprint.
 
-        Arguments
-        ---------
-        query_footprint: Footprint to search against the index.
+        Args:
+            query_footprint: Footprint to search against the index.
 
-        Returns
-        -------
-        Database footprints that intersect the query footprint.
+        Returns:
+            Database footprints that intersect the query footprint.
         """
         query_transformer: tfs.Transformer = tfs.Transformer.from_crs(
             query_footprint.crs,
@@ -107,16 +96,13 @@ class CameraFootprintIndex:
         self,
         query_footprint: CameraFootprint,
     ) -> list[CameraFootprintLink]:
-        """
-        Return CameraFootprintLinks for all database footprints overlapping the query.
+        """Return CameraFootprintLinks for database footprints overlapping the query.
 
-        Arguments
-        ---------
-        query_footprint: Footprint to search against the index.
+        Args:
+            query_footprint: Footprint to search against the index.
 
-        Returns
-        -------
-        Links between the query footprint and each overlapping database footprint.
+        Returns:
+            Links between the query footprint and each overlapping database footprint.
         """
         overlapping_footprints: list[CameraFootprint] = self.search(query_footprint)
         return [
@@ -136,16 +122,14 @@ class CameraFootprintIndex:
 def create_camera_footprint_index(
     camera_footprints: list[CameraFootprint],
 ) -> CameraFootprintIndex:
-    """
-    Create a camera footprint index from a collection of camera footprints.
+    """Create a camera footprint index from a collection of camera footprints.
 
-    Arguments
-    ---------
-    camera_footprints: Footprints to index. Must be non-empty and all in the same CRS.
+    Args:
+        camera_footprints: Footprints to index. Must be non-empty and all in the same
+            CRS.
 
-    Returns
-    -------
-    CameraFootprintIndex built from the given footprints.
+    Returns:
+        CameraFootprintIndex built from the given footprints.
     """
     if len(camera_footprints) == 0:
         raise ValueError("camera_footprints must not be empty.")

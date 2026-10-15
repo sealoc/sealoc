@@ -1,6 +1,4 @@
-"""
-Module for data types for database building tasks.
-"""
+"""Module for data types for database building tasks."""
 
 import pandas as pd  # type: ignore[import-untyped]
 
@@ -15,18 +13,16 @@ from pathlib import Path
 
 @dataclass
 class CameraDataTables:
-    """
-    Collection of camera data tables loaded from CSV files.
+    """Collection of camera data tables loaded from CSV files.
 
-    Attributes
-    ----------
-    camera_calibrations: Calibration data table.
-    camera_sensors: Sensor data table.
-    cameras: Camera data table.
-    camera_groups: Camera group data table.
-    camera_bundles: Camera bundle data table.
-    camera_poses: Camera pose data table.
-    camera_footprints: Camera footprint data table.
+    Attributes:
+        camera_calibrations: Calibration data table.
+        camera_sensors: Sensor data table.
+        cameras: Camera data table.
+        camera_groups: Camera group data table.
+        camera_bundles: Camera bundle data table.
+        camera_poses: Camera pose data table.
+        camera_footprints: Camera footprint data table.
     """
 
     camera_calibrations: pd.DataFrame
@@ -39,12 +35,10 @@ class CameraDataTables:
 
     @property
     def frames(self) -> list[pd.DataFrame]:
-        """
-        Return the data frames in the tables object.
+        """Return the data frames in the tables object.
 
-        Returns
-        -------
-        List of all data frames in the collection.
+        Returns:
+            List of all data frames in the collection.
         """
         return [
             self.camera_calibrations,
@@ -59,13 +53,11 @@ class CameraDataTables:
 
 @dataclass
 class InitializeDatabaseCommand:
-    """
-    Command for initializing a database with ORM models.
+    """Command for initializing a database with ORM models.
 
-    Attributes
-    ----------
-    database_url: URL of the database to initialize.
-    clear_database: Whether to drop existing tables before creating new ones.
+    Attributes:
+        database_url: URL of the database to initialize.
+        clear_database: Whether to drop existing tables before creating new ones.
     """
 
     database_url: str
@@ -74,13 +66,11 @@ class InitializeDatabaseCommand:
 
 @dataclass
 class PopulateDatabaseCommand:
-    """
-    Command for populating a database with camera data.
+    """Command for populating a database with camera data.
 
-    Attributes
-    ----------
-    database_url: URL of the database to populate.
-    input_dir: Directory containing the camera CSV files.
+    Attributes:
+        database_url: URL of the database to populate.
+        input_dir: Directory containing the camera CSV files.
     """
 
     database_url: str
@@ -89,12 +79,10 @@ class PopulateDatabaseCommand:
 
 @dataclass(slots=True)
 class PopulateDatabaseContext:
-    """
-    Context type for building a camera database from files.
+    """Context type for building a camera database from files.
 
-    Attributes
-    ----------
-    camera_tables: Loaded camera data tables, or None before loading.
+    Attributes:
+        camera_tables: Loaded camera data tables, or None before loading.
     """
 
     camera_tables: CameraDataTables | None = field(default=None)
@@ -102,18 +90,16 @@ class PopulateDatabaseContext:
 
 @dataclass(slots=True)
 class PopulateDatabaseState:
-    """
-    State type for populating a database with camera data.
+    """State type for populating a database with camera data.
 
-    Attributes
-    ----------
-    camera_calibrations: Built calibration records.
-    camera_sensors: Built sensor records.
-    cameras: Built camera records.
-    camera_groups: Built camera group records.
-    camera_bundles: Built camera bundle records.
-    camera_poses: Built camera pose records.
-    camera_footprints: Built camera footprint records.
+    Attributes:
+        camera_calibrations: Built calibration records.
+        camera_sensors: Built sensor records.
+        cameras: Built camera records.
+        camera_groups: Built camera group records.
+        camera_bundles: Built camera bundle records.
+        camera_poses: Built camera pose records.
+        camera_footprints: Built camera footprint records.
     """
 
     camera_calibrations: list[orm.CameraCalibrationRecord] = field(default_factory=list)
@@ -125,12 +111,10 @@ class PopulateDatabaseState:
     camera_footprints: list[orm.CameraFootprintRecord] = field(default_factory=list)
 
     def get_calibration_map(self) -> dict[int, orm.CameraCalibrationRecord]:
-        """
-        Return a mapping from id to calibration record.
+        """Return a mapping from id to calibration record.
 
-        Returns
-        -------
-        Dict mapping calibration id to CameraCalibrationRecord.
+        Returns:
+            Dict mapping calibration id to CameraCalibrationRecord.
         """
         return {
             calibration.id: calibration
@@ -139,44 +123,36 @@ class PopulateDatabaseState:
         }
 
     def get_sensor_map(self) -> dict[int, orm.CameraSensorRecord]:
-        """
-        Return a mapping from id to sensor record.
+        """Return a mapping from id to sensor record.
 
-        Returns
-        -------
-        Dict mapping sensor id to CameraSensorRecord.
+        Returns:
+            Dict mapping sensor id to CameraSensorRecord.
         """
         return {
             sensor.id: sensor for sensor in self.camera_sensors if sensor.id is not None
         }
 
     def get_camera_map(self) -> dict[int, orm.CameraRecord]:
-        """
-        Return a mapping from id to camera record.
+        """Return a mapping from id to camera record.
 
-        Returns
-        -------
-        Dict mapping camera id to CameraRecord.
+        Returns:
+            Dict mapping camera id to CameraRecord.
         """
         return {camera.id: camera for camera in self.cameras if camera.id is not None}
 
     def get_camera_groups(self) -> dict[int, orm.CameraGroupRecord]:
-        """
-        Return a mapping from id to camera group record.
+        """Return a mapping from id to camera group record.
 
-        Returns
-        -------
-        Dict mapping camera group id to CameraGroupRecord.
+        Returns:
+            Dict mapping camera group id to CameraGroupRecord.
         """
         return {group.id: group for group in self.camera_groups if group.id is not None}
 
     def get_camera_bundles(self) -> dict[int, orm.CameraBundleRecord]:
-        """
-        Return a mapping from id to camera bundle record.
+        """Return a mapping from id to camera bundle record.
 
-        Returns
-        -------
-        Dict mapping camera bundle id to CameraBundleRecord.
+        Returns:
+            Dict mapping camera bundle id to CameraBundleRecord.
         """
         return {
             bundle.id: bundle for bundle in self.camera_bundles if bundle.id is not None
