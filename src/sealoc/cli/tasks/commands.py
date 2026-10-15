@@ -1,6 +1,4 @@
-"""
-Commands for sealocs CLI to invoke tasks.
-"""
+"""Commands for sealocs CLI to invoke tasks."""
 
 from pathlib import Path
 

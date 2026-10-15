@@ -1,5 +1,4 @@
-"""
-Package for image types and image I/O.
+"""Package for image types and image I/O.
 
 This package provides a lightweight Image value type along with helpers
 for reading and writing images using imageio.
@@ -15,4 +14,10 @@ from .image_types import (
     ImagePixelFormat as ImagePixelFormat,
 )
 
-__all__ = []
+__all__ = [
+    "read_image",
+    "write_image",
+    "Image",
+    "ImageLayout",
+    "ImagePixelFormat",
+]

@@ -1,5 +1,5 @@
-"""
-Package for processing camera poses and footprints.
+"""Package for processing camera poses and footprints.
+
 The package includes indices for finding overlapping camera footprints and spatially
 proximate camera poses, along with link types and metric functions.
 """
@@ -31,4 +31,17 @@ from .types import (
     CameraPoseLink as CameraPoseLink,
 )
 
-__all__ = []
+__all__ = [
+    "CameraFootprintIndex",
+    "create_camera_footprint_index",
+    "calculate_footprint_area",
+    "calculate_footprint_iou",
+    "calculate_footprint_intersection_area",
+    "calculate_footprint_union_area",
+    "CameraPoseIndex",
+    "create_camera_pose_index",
+    "calculate_point_distance",
+    "calculate_pose_distance",
+    "CameraFootprintLink",
+    "CameraPoseLink",
+]

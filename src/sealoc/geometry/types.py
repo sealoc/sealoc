@@ -1,6 +1,4 @@
-"""
-Module for camera links including link types and factories.
-"""
+"""Module for camera links including link types and factories."""
 
 from pydantic import BaseModel
 
@@ -11,14 +9,12 @@ from sealoc.models import (
 
 
 class CameraPoseLink(BaseModel):
-    """
-    Geometric link between a query and database camera via pose proximity.
+    """Geometric link between a query and database camera via pose proximity.
 
-    Attributes
-    ----------
-    database_pose: Pose of the matched database camera.
-    query_pose: Pose of the query camera.
-    distance_meters: Distance between the two poses in meters.
+    Attributes:
+        database_pose: Pose of the matched database camera.
+        query_pose: Pose of the query camera.
+        distance_meters: Distance between the two poses in meters.
     """
 
     database_pose: CameraPose
@@ -28,38 +24,32 @@ class CameraPoseLink(BaseModel):
 
     @property
     def query_camera_id(self) -> int:
-        """
-        Return the query camera id from the link.
+        """Return the query camera id from the link.
 
-        Returns
-        -------
-        Camera id of the query camera.
+        Returns:
+            Camera id of the query camera.
         """
         return self.query_pose.camera_id
 
     @property
     def database_camera_id(self) -> int:
-        """
-        Return the database camera id from the link.
+        """Return the database camera id from the link.
 
-        Returns
-        -------
-        Camera id of the database camera.
+        Returns:
+            Camera id of the database camera.
         """
         return self.database_pose.camera_id
 
 
 class CameraFootprintLink(BaseModel):
-    """
-    Geometric link between a query and database camera via footprint overlap.
+    """Geometric link between a query and database camera via footprint overlap.
 
-    Attributes
-    ----------
-    database_footprint: Footprint of the matched database camera.
-    query_footprint: Footprint of the query camera.
-    database_footprint_area: Area of the database footprint.
-    query_footprint_area: Area of the query footprint.
-    footprint_iou: Intersection-over-union of the two footprints.
+    Attributes:
+        database_footprint: Footprint of the matched database camera.
+        query_footprint: Footprint of the query camera.
+        database_footprint_area: Area of the database footprint.
+        query_footprint_area: Area of the query footprint.
+        footprint_iou: Intersection-over-union of the two footprints.
     """
 
     database_footprint: CameraFootprint
@@ -71,22 +61,18 @@ class CameraFootprintLink(BaseModel):
 
     @property
     def query_camera_id(self) -> int:
-        """
-        Return the query camera id from the link.
+        """Return the query camera id from the link.
 
-        Returns
-        -------
-        Camera id of the query camera.
+        Returns:
+            Camera id of the query camera.
         """
         return self.query_footprint.camera_id
 
     @property
     def database_camera_id(self) -> int:
-        """
-        Return the database camera id from the link.
+        """Return the database camera id from the link.
 
-        Returns
-        -------
-        Camera id of the database camera.
+        Returns:
+            Camera id of the database camera.
         """
         return self.database_footprint.camera_id

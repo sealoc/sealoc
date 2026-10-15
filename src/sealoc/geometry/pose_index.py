@@ -16,14 +16,12 @@ from .types import CameraPoseLink
 
 @dataclasses.dataclass(frozen=True)
 class CameraPoseIndex:
-    """
-    Spatial index for finding camera poses within a distance threshold.
+    """Spatial index for finding camera poses within a distance threshold.
 
-    Attributes
-    ----------
-    database_poses: Poses stored in the index.
-    database_transformer: Transformer used to project poses into the index CRS.
-    database_tree: STRtree of projected pose points.
+    Attributes:
+        database_poses: Poses stored in the index.
+        database_transformer: Transformer used to project poses into the index CRS.
+        database_tree: STRtree of projected pose points.
     """
 
     database_poses: list[CameraPose]
@@ -37,12 +35,10 @@ class CameraPoseIndex:
 
     @property
     def source_crs(self) -> tfs.CRS:
-        """
-        Source CRS of the database transformer.
+        """Source CRS of the database transformer.
 
-        Returns
-        -------
-        Source CRS used when projecting database poses.
+        Returns:
+            Source CRS used when projecting database poses.
         """
         crs = self.database_transformer.source_crs
         assert crs is not None
@@ -50,12 +46,10 @@ class CameraPoseIndex:
 
     @property
     def target_crs(self) -> tfs.CRS:
-        """
-        Target CRS of the database transformer.
+        """Target CRS of the database transformer.
 
-        Returns
-        -------
-        Target CRS (UTM) used for distance-based querying.
+        Returns:
+            Target CRS (UTM) used for distance-based querying.
         """
         crs = self.database_transformer.target_crs
         assert crs is not None
@@ -63,26 +57,21 @@ class CameraPoseIndex:
 
     @property
     def database_points(self) -> list[shapely.Point]:
-        """
-        Points stored in the database tree.
+        """Points stored in the database tree.
 
-        Returns
-        -------
-        List of projected pose points in the index.
+        Returns:
+            List of projected pose points in the index.
         """
         return list(self.database_tree.geometries)
 
     def has_pose(self, camera_id: int) -> bool:
-        """
-        Return True if there is a pose for the given camera id.
+        """Return True if there is a pose for the given camera id.
 
-        Arguments
-        ---------
-        camera_id: Camera id to look up.
+        Args:
+            camera_id: Camera id to look up.
 
-        Returns
-        -------
-        True if the index contains a pose for camera_id.
+        Returns:
+            True if the index contains a pose for camera_id.
         """
         camera_ids: list[int] = [pose.camera_id for pose in self.database_poses]
         return camera_id in camera_ids
@@ -92,17 +81,14 @@ class CameraPoseIndex:
         query_pose: CameraPose,
         max_distance: float,
     ) -> list[CameraPose]:
-        """
-        Return database poses within a distance threshold of the query pose.
+        """Return database poses within a distance threshold of the query pose.
 
-        Arguments
-        ---------
-        query_pose: Pose of the query camera.
-        max_distance: Maximum distance threshold in meters.
+        Args:
+            query_pose: Pose of the query camera.
+            max_distance: Maximum distance threshold in meters.
 
-        Returns
-        -------
-        Database poses within max_distance meters of the query pose.
+        Returns:
+            Database poses within max_distance meters of the query pose.
         """
         query_transformer: tfs.Transformer = tfs.Transformer.from_crs(
             query_pose.crs,
@@ -126,17 +112,14 @@ class CameraPoseIndex:
         query_pose: CameraPose,
         max_distance: float,
     ) -> list[CameraPoseLink]:
-        """
-        Return CameraPoseLinks for all database poses within the distance threshold.
+        """Return CameraPoseLinks for all database poses within the distance threshold.
 
-        Arguments
-        ---------
-        query_pose: Pose of the query camera.
-        max_distance: Maximum distance threshold in meters.
+        Args:
+            query_pose: Pose of the query camera.
+            max_distance: Maximum distance threshold in meters.
 
-        Returns
-        -------
-        Links between the query pose and each proximate database pose.
+        Returns:
+            Links between the query pose and each proximate database pose.
         """
         proximate_poses: list[CameraPose] = self.search(query_pose, max_distance)
         return [
@@ -152,16 +135,13 @@ class CameraPoseIndex:
 def create_camera_pose_index(
     camera_poses: list[CameraPose],
 ) -> CameraPoseIndex:
-    """
-    Create a pose index from a collection of camera poses.
+    """Create a pose index from a collection of camera poses.
 
-    Arguments
-    ---------
-    camera_poses: Poses to index. Must be non-empty and all in the same CRS.
+    Args:
+        camera_poses: Poses to index. Must be non-empty and all in the same CRS.
 
-    Returns
-    -------
-    CameraPoseIndex built from the given poses.
+    Returns:
+        CameraPoseIndex built from the given poses.
     """
     if len(camera_poses) == 0:
         raise ValueError("camera_poses must not be empty.")

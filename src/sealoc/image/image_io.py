@@ -1,5 +1,4 @@
-"""
-Image I/O helpers built on top of imageio.
+"""Image I/O helpers built on top of imageio.
 
 Provides functions to read images into the Image type and to write
 Image or NumPy arrays back to disk or other URIs.
@@ -9,6 +8,7 @@ import imageio.v3 as iio
 import numpy as np
 
 from pathlib import Path
+from typing import Any
 
 from .image_types import (
     Image,
@@ -17,18 +17,15 @@ from .image_types import (
 
 
 def _infer_pixel_format(values: np.ndarray) -> ImagePixelFormat:
-    """
-    Infer an ImagePixelFormat from the array dtype and channel count.
+    """Infer an ImagePixelFormat from the array dtype and channel count.
 
     Distinguishes between grayscale vs. color and floating-point vs. integer data.
 
-    Arguments
-    ---------
-    values: NumPy array of shape H×W×C.
+    Args:
+        values: NumPy array of shape H×W×C.
 
-    Returns
-    -------
-    Inferred ImagePixelFormat for the array.
+    Returns:
+        Inferred ImagePixelFormat for the array.
     """
     dtype: np.dtype = values.dtype
     channels: int = values.shape[2]
@@ -54,24 +51,22 @@ def read_image(
     index: int | None = None,
     plugin: str | None = None,
     extension: str | None = None,
-    **kwargs,
+    **kwargs: Any,
 ) -> Image:
-    """
-    Read an image from a URI into an Image.
+    """Read an image from a URI into an Image.
 
     Uses imageio.v3.imread under the hood and returns an Image with shape H×W×C.
     Additional keyword arguments are passed through to imageio.
 
-    Arguments
-    ---------
-    uri: File path or URI to read the image from.
-    index: Frame index for multi-frame images.
-    plugin: imageio plugin to use.
-    extension: File extension hint for format detection.
+    Args:
+        uri: File path or URI to read the image from.
+        index: Frame index for multi-frame images.
+        plugin: imageio plugin to use.
+        extension: File extension hint for format detection.
+        **kwargs: Additional keyword arguments passed to imageio.v3.imread.
 
-    Returns
-    -------
-    Image with shape H×W×C.
+    Returns:
+        Image with shape H×W×C.
     """
     try:
         read_kwargs: dict = {}
@@ -99,24 +94,22 @@ def write_image(
     *,
     plugin: str | None = None,
     extension: str | None = None,
-    **kwargs,
+    **kwargs: Any,
 ) -> Path | str:
-    """
-    Write an image to a URI using imageio.
+    """Write an image to a URI using imageio.
 
     Accepts either an Image instance or a raw NumPy array. Returns the URI on
     success; forwards extra keyword arguments to imageio.v3.imwrite.
 
-    Arguments
-    ---------
-    image: Image or NumPy array to write.
-    uri: Destination file path or URI.
-    plugin: imageio plugin to use.
-    extension: File extension hint for format detection.
+    Args:
+        image: Image or NumPy array to write.
+        uri: Destination file path or URI.
+        plugin: imageio plugin to use.
+        extension: File extension hint for format detection.
+        **kwargs: Additional keyword arguments passed to imageio.v3.imwrite.
 
-    Returns
-    -------
-    The URI on success.
+    Returns:
+        The URI on success.
     """
     if isinstance(image, Image):
         values: np.ndarray = image.to_numpy()

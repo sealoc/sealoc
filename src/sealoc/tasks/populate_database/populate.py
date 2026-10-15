@@ -1,6 +1,4 @@
-"""
-Module for running a database population task.
-"""
+"""Module for running a database population task."""
 
 import ast
 
@@ -30,12 +28,10 @@ CAMERA_FILENAMES: list[str] = [
 
 
 def run_populate_database(command: PopulateDatabaseCommand) -> None:
-    """
-    Populate a database with camera data from files.
+    """Populate a database with camera data from files.
 
-    Arguments
-    ---------
-    command: Command containing the database URL and input directory.
+    Args:
+        command: Command containing the database URL and input directory.
     """
     context: PopulateDatabaseContext = PopulateDatabaseContext()
 
@@ -54,12 +50,10 @@ def run_populate_database(command: PopulateDatabaseCommand) -> None:
 
 
 def _check_camera_table_files(input_dir: Path) -> None:
-    """
-    Check that all expected CSV files are present in the directory.
+    """Check that all expected CSV files are present in the directory.
 
-    Arguments
-    ---------
-    input_dir: Directory to check for camera CSV files.
+    Args:
+        input_dir: Directory to check for camera CSV files.
     """
     listed_filepaths: list[Path] = [
         entry for entry in input_dir.iterdir() if entry.is_file()
@@ -72,16 +66,13 @@ def _check_camera_table_files(input_dir: Path) -> None:
 
 
 def _read_camera_tables(input_dir: Path) -> CameraDataTables:
-    """
-    Read all camera CSV files from a directory into a CameraDataTables object.
+    """Read all camera CSV files from a directory into a CameraDataTables object.
 
-    Arguments
-    ---------
-    input_dir: Directory containing the camera CSV files.
+    Args:
+        input_dir: Directory containing the camera CSV files.
 
-    Returns
-    -------
-    CameraDataTables populated from the CSV files.
+    Returns:
+        CameraDataTables populated from the CSV files.
     """
     listed_filepaths: list[Path] = [
         entry for entry in input_dir.iterdir() if entry.is_file()
@@ -98,12 +89,10 @@ def _read_camera_tables(input_dir: Path) -> CameraDataTables:
 
 
 def _parse_table_columns(tables: CameraDataTables) -> None:
-    """
-    Parse stringified tuple/dict columns in-place using ast.literal_eval.
+    """Parse stringified tuple/dict columns in-place using ast.literal_eval.
 
-    Arguments
-    ---------
-    tables: Camera data tables whose columns contain Python literal strings.
+    Args:
+        tables: Camera data tables whose columns contain Python literal strings.
     """
     # Evaluate the sensor location and rotation strings as tuples
     tables.camera_sensors["sensor_location"] = tables.camera_sensors[

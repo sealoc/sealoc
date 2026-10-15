@@ -1,6 +1,4 @@
-"""
-Module for routing and planning dataset downloads.
-"""
+"""Module for routing and planning dataset downloads."""
 
 import shutil
 import zipfile
@@ -17,17 +15,14 @@ from .types import (
 
 
 def route_entry(entry: TocEntry, config: DownloadDatasetConfig) -> Path:
-    """
-    Return the destination subdirectory for a TOC entry (relative to root_dir).
+    """Return the destination subdirectory for a TOC entry (relative to root_dir).
 
-    Arguments
-    ---------
-    entry: TOC entry to route.
-    config: Download config with routing rules and default destination.
+    Args:
+        entry: TOC entry to route.
+        config: Download config with routing rules and default destination.
 
-    Returns
-    -------
-    Relative destination path for the entry.
+    Returns:
+        Relative destination path for the entry.
     """
     name = Path(entry.filename).name.lower()
     for rule in config.routing_rules:
@@ -43,20 +38,17 @@ def build_download_job(
     cache_dir: Path,
     overwrite: bool,
 ) -> DownloadJob:
-    """
-    Build a DownloadJob for a single TOC entry.
+    """Build a DownloadJob for a single TOC entry.
 
-    Arguments
-    ---------
-    entry: TOC entry to build a job for.
-    destination: Relative destination directory under root_dir.
-    root_dir: Root download directory.
-    cache_dir: Temporary cache directory for in-progress downloads.
-    overwrite: Whether to overwrite an existing target file.
+    Args:
+        entry: TOC entry to build a job for.
+        destination: Relative destination directory under root_dir.
+        root_dir: Root download directory.
+        cache_dir: Temporary cache directory for in-progress downloads.
+        overwrite: Whether to overwrite an existing target file.
 
-    Returns
-    -------
-    Configured DownloadJob for the entry.
+    Returns:
+        Configured DownloadJob for the entry.
     """
     cache_path = cache_dir / Path(entry.filename).name
     target_path = root_dir / destination / Path(entry.filename).name
@@ -80,20 +72,17 @@ def build_download_plan(
     cache_dir: Path,
     overwrite: bool,
 ) -> DownloadPlan:
-    """
-    Build a DownloadPlan by routing each entry and constructing its job.
+    """Build a DownloadPlan by routing each entry and constructing its job.
 
-    Arguments
-    ---------
-    entries: TOC entries to include in the plan.
-    config: Download config with routing rules.
-    root_dir: Root download directory.
-    cache_dir: Temporary cache directory for in-progress downloads.
-    overwrite: Whether to overwrite existing target files.
+    Args:
+        entries: TOC entries to include in the plan.
+        config: Download config with routing rules.
+        root_dir: Root download directory.
+        cache_dir: Temporary cache directory for in-progress downloads.
+        overwrite: Whether to overwrite existing target files.
 
-    Returns
-    -------
-    DownloadPlan with a job for each entry.
+    Returns:
+        DownloadPlan with a job for each entry.
     """
     jobs: list[DownloadJob] = []
     for entry in entries:
@@ -104,13 +93,11 @@ def build_download_plan(
 
 
 def validate_download_plan(plan: DownloadPlan, root_dir: Path) -> None:
-    """
-    Validate that there is sufficient disk space for a download plan.
+    """Validate that there is sufficient disk space for a download plan.
 
-    Arguments
-    ---------
-    plan: Download plan to validate.
-    root_dir: Root directory to check for available disk space.
+    Args:
+        plan: Download plan to validate.
+        root_dir: Root directory to check for available disk space.
     """
     required = plan.total_bytes
     free = shutil.disk_usage(root_dir).free
@@ -123,16 +110,14 @@ def validate_download_plan(plan: DownloadPlan, root_dir: Path) -> None:
 
 
 def _zip_on_complete(path: Path) -> None:
-    """
-    Extract a zip archive next to the zip file, then delete it.
+    """Extract a zip archive next to the zip file, then delete it.
 
     If all entries share a single top-level directory, extract directly into
     path.parent so that directory becomes the final path component. Otherwise
     wrap the contents in a new directory named after the zip stem.
 
-    Arguments
-    ---------
-    path: Path to the downloaded zip file.
+    Args:
+        path: Path to the downloaded zip file.
     """
     with zipfile.ZipFile(path) as zip_file:
         top_level = _zip_single_top_level_dir(zip_file)
@@ -143,16 +128,13 @@ def _zip_on_complete(path: Path) -> None:
 
 
 def _zip_single_top_level_dir(zip_file: zipfile.ZipFile) -> str | None:
-    """
-    Return the single top-level directory if every entry in the zip shares one.
+    """Return the single top-level directory if every entry in the zip shares one.
 
-    Arguments
-    ---------
-    zip_file: Open ZipFile to inspect.
+    Args:
+        zip_file: Open ZipFile to inspect.
 
-    Returns
-    -------
-    Top-level directory name, or None if entries span multiple roots.
+    Returns:
+        Top-level directory name, or None if entries span multiple roots.
     """
     names = zip_file.namelist()
     if not names:

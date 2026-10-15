@@ -1,6 +1,4 @@
-"""
-Module for database types.
-"""
+"""Module for database types."""
 
 import typing
 

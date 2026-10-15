@@ -1,6 +1,4 @@
-"""
-Repository for reading camera footprints from a database session.
-"""
+"""Repository for reading camera footprints from a database session."""
 
 import sealoc.database as db
 import sealoc.orm as orm
@@ -20,15 +18,13 @@ VARIABLE_LIMIT: int = 999
 
 @dataclass(frozen=True)
 class CameraFootprintRepository:
-    """
-    Repository for querying camera footprints and mapping them to domain models.
+    """Repository for querying camera footprints and mapping them to domain models.
 
     The repository wraps a database session, reads 'CameraFootprintRecord' ORM objects,
     and returns mapped 'CameraFootprint' domain models.
 
-    Attributes
-    ----------
-    session: Database session used for all queries.
+    Attributes:
+        session: Database session used for all queries.
     """
 
     session: db.Session
@@ -37,28 +33,23 @@ class CameraFootprintRepository:
     model_type = models.CameraFootprint
 
     def get_all_ids(self) -> list[int]:
-        """
-        Retrieve all camera footprint ids.
+        """Retrieve all camera footprint ids.
 
-        Returns
-        -------
-        List of all camera footprint ids.
+        Returns:
+            List of all camera footprint ids.
         """
         statement = db.select(orm.CameraFootprintRecord.camera_id)
         result = self.session.exec(statement)
         return list(result.all())
 
     def get_by_id(self, camera_id: int) -> models.CameraFootprint | None:
-        """
-        Retrieve a camera footprint by its camera id.
+        """Retrieve a camera footprint by its camera id.
 
-        Arguments
-        ---------
-        camera_id: Camera id to look up.
+        Args:
+            camera_id: Camera id to look up.
 
-        Returns
-        -------
-        Matching CameraFootprint, or None if not found.
+        Returns:
+            Matching CameraFootprint, or None if not found.
         """
         record: orm.CameraFootprintRecord | None = self.session.get(
             orm.CameraFootprintRecord, camera_id
@@ -66,18 +57,15 @@ class CameraFootprintRepository:
         return to_model(record) if record else None
 
     def get_all_by_ids(self, camera_ids: Iterable[int]) -> list[models.CameraFootprint]:
-        """
-        Retrieve all camera footprints with a camera id in the given collection.
+        """Retrieve all camera footprints with a camera id in the given collection.
 
         Queries in batches to avoid SQLite variable limits.
 
-        Arguments
-        ---------
-        camera_ids: Camera ids to look up.
+        Args:
+            camera_ids: Camera ids to look up.
 
-        Returns
-        -------
-        List of matching CameraFootprint models.
+        Returns:
+            List of matching CameraFootprint models.
         """
         aggregated_footprints: list[models.CameraFootprint] = list()
 
@@ -91,16 +79,13 @@ class CameraFootprintRepository:
         return aggregated_footprints
 
     def get_one_by(self, **filters: Any) -> models.CameraFootprint | None:
-        """
-        Retrieve the first camera footprint matching the given attribute filters.
+        """Retrieve the first camera footprint matching the given attribute filters.
 
-        Arguments
-        ---------
-        **filters: Attribute name/value pairs to filter by.
+        Args:
+            **filters: Attribute name/value pairs to filter by.
 
-        Returns
-        -------
-        First matching CameraFootprint, or None if not found.
+        Returns:
+            First matching CameraFootprint, or None if not found.
         """
         statement = self._build_select_statement(filters)
         result = self.session.exec(statement)
@@ -108,32 +93,26 @@ class CameraFootprintRepository:
         return to_model(record) if record else None
 
     def get_all_by(self, **filters: Any) -> list[models.CameraFootprint]:
-        """
-        Retrieve all camera footprints matching the given attribute filters.
+        """Retrieve all camera footprints matching the given attribute filters.
 
-        Arguments
-        ---------
-        **filters: Attribute name/value pairs to filter by.
+        Args:
+            **filters: Attribute name/value pairs to filter by.
 
-        Returns
-        -------
-        List of all matching CameraFootprint models.
+        Returns:
+            List of all matching CameraFootprint models.
         """
         statement = self._build_select_statement(filters)
         result = self.session.exec(statement)
         return [to_model(record) for record in result.all()]
 
     def _build_select_statement(self, filters: dict[str, Any]):
-        """
-        Build a select statement for camera footprints with optional attribute filters.
+        """Build a camera footprint select statement with optional attribute filters.
 
-        Arguments
-        ---------
-        filters: Attribute name/value pairs to filter by.
+        Args:
+            filters: Attribute name/value pairs to filter by.
 
-        Returns
-        -------
-        Select statement with all non-None filters applied.
+        Returns:
+            Select statement with all non-None filters applied.
         """
         filters = filters or {}
         statement = db.select(orm.CameraFootprintRecord)

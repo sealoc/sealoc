@@ -1,6 +1,4 @@
-"""
-Entrypoint for sealocs command-line interface (CLI).
-"""
+"""Entrypoint for sealocs command-line interface (CLI)."""
 
 import click
 

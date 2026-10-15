@@ -87,6 +87,6 @@ dal: DataAccessLayer = load_data_access_layer(
 )
 ```
 
-See [Usage](02_usage.md) for practical examples, [Data Model](03_data_model.md) for an
+See [Usage](usage.md) for practical examples, [Data Model](data-model.md) for an
 explanation of how bundles, groups, cameras, poses and footprints relate to each other,
-and [API Reference](04_api_reference.md) for the full method listings.
+and [API Reference](api/dal.md) for the full method listings.

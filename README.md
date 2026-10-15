@@ -1,8 +1,8 @@
 # SEALOC - A Benchmark Dataset for Long-Term Visual Localization in Dynamic Benthic Environments
 
-![ubuntu](https://github.com/sealoc/sealoc/actions/workflows/ubuntu.yml/badge.svg)
-![windows](https://github.com/sealoc/sealoc/actions/workflows/windows.yml/badge.svg)
-![macos](https://github.com/sealoc/sealoc/actions/workflows/macos.yml/badge.svg)
+![build-ubuntu](https://github.com/sealoc/sealoc/actions/workflows/build-ubuntu.yml/badge.svg)
+![build-windows](https://github.com/sealoc/sealoc/actions/workflows/build-windows.yml/badge.svg)
+![build-macos](https://github.com/sealoc/sealoc/actions/workflows/build-macos.yml/badge.svg)
 [![Dataset](https://img.shields.io/badge/Dataset-10.11582%2F2026.QRO1LF3Z-blue)](https://doi.org/10.11582/2026.QRO1LF3Z)
 [![Paper](https://img.shields.io/badge/Paper-10.3389%2Ffrobt.2026.1821019-blue)](https://doi.org/10.3389/frobt.2026.1821019)
 
@@ -12,10 +12,12 @@ the dataset and querying camera geometry data (poses, footprints, calibrations).
 
 ## Documentation
 
-- [Getting Started](docs/01_getting_started.md) — install, download the dataset, and run your first query
-- [Usage](docs/02_usage.md) — practical examples for querying bundles, calibrations, poses, and spatial indices
-- [Data Model](docs/03_data_model.md) — bundles, groups, cameras, poses, and footprints explained
-- [API Reference](docs/04_api_reference.md) — full reference for `DataAccessLayer`, repositories, and geometry indices
+The documentation is hosted at [sealoc.github.io/sealoc](https://sealoc.github.io/sealoc/).
+
+- [Getting Started](https://sealoc.github.io/sealoc/getting-started/) — install, download the dataset, and run your first query
+- [Usage](https://sealoc.github.io/sealoc/usage/) — practical examples for querying bundles, calibrations, poses, and spatial indices
+- [Data Model](https://sealoc.github.io/sealoc/data-model/) — bundles, groups, cameras, poses, and footprints explained
+- [API Reference](https://sealoc.github.io/sealoc/api/dal/) — reference generated from the source code docstrings
 
 ## Quick start
 
@@ -31,7 +33,7 @@ uv add git+https://github.com/sealoc/sealoc.git
 pip install git+https://github.com/sealoc/sealoc.git
 ```
 
-See the [Getting Started guide](docs/01_getting_started.md) for how to download the
+See the [Getting Started guide](https://sealoc.github.io/sealoc/getting-started/) for how to download the
 dataset and run your first query.
 
 ## Configuration
@@ -147,7 +149,7 @@ with dal.session() as repos:
 ```
 
 Additional examples covering spatial indices can be found in the
-[Usage guide](docs/02_usage.md).
+[Usage guide](https://sealoc.github.io/sealoc/usage/).
 
 ## Citation
 

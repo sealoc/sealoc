@@ -1,9 +1,9 @@
-name: windows
+name: build-ubuntu
 
 on: [push, pull_request]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 permissions:
@@ -11,8 +11,9 @@ permissions:
 
 jobs:
   build:
+    name: build-ubuntu (${{ matrix.python-version }})
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false

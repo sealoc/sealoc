@@ -1,6 +1,4 @@
-"""
-Module for calculating metrics based on camera footprints.
-"""
+"""Module for calculating metrics based on camera footprints."""
 
 import shapely  # type: ignore[import-untyped]
 import shapely.ops  # type: ignore[import-untyped]
@@ -11,16 +9,13 @@ from sealoc.models import CameraFootprint
 
 
 def calculate_footprint_area(footprint: CameraFootprint) -> float:
-    """
-    Calculate the area of a footprint in square meters.
+    """Calculate the area of a footprint in square meters.
 
-    Arguments
-    ---------
-    footprint: Camera footprint to measure.
+    Args:
+        footprint: Camera footprint to measure.
 
-    Returns
-    -------
-    Footprint area in square meters.
+    Returns:
+        Footprint area in square meters.
     """
     return _calculate_polygon_area(footprint.shape, footprint.crs)
 
@@ -29,17 +24,14 @@ def calculate_footprint_intersection_area(
     footprint1: CameraFootprint,
     footprint2: CameraFootprint,
 ) -> float:
-    """
-    Calculate the area of the intersection between two camera footprints.
+    """Calculate the area of the intersection between two camera footprints.
 
-    Arguments
-    ---------
-    footprint1: First camera footprint.
-    footprint2: Second camera footprint.
+    Args:
+        footprint1: First camera footprint.
+        footprint2: Second camera footprint.
 
-    Returns
-    -------
-    Intersection area in square meters.
+    Returns:
+        Intersection area in square meters.
     """
     crs_equal_area: tfs.CRS = tfs.CRS("EPSG:6933")
 
@@ -67,17 +59,14 @@ def calculate_footprint_union_area(
     footprint1: CameraFootprint,
     footprint2: CameraFootprint,
 ) -> float:
-    """
-    Calculate the area of the union between two camera footprints.
+    """Calculate the area of the union between two camera footprints.
 
-    Arguments
-    ---------
-    footprint1: First camera footprint.
-    footprint2: Second camera footprint.
+    Args:
+        footprint1: First camera footprint.
+        footprint2: Second camera footprint.
 
-    Returns
-    -------
-    Union area in square meters.
+    Returns:
+        Union area in square meters.
     """
     crs_equal_area: tfs.CRS = tfs.CRS("EPSG:6933")
 
@@ -105,17 +94,14 @@ def calculate_footprint_iou(
     footprint1: CameraFootprint,
     footprint2: CameraFootprint,
 ) -> float:
-    """
-    Calculate the intersection over union (IoU) for two camera footprints.
+    """Calculate the intersection over union (IoU) for two camera footprints.
 
-    Arguments
-    ---------
-    footprint1: First camera footprint.
-    footprint2: Second camera footprint.
+    Args:
+        footprint1: First camera footprint.
+        footprint2: Second camera footprint.
 
-    Returns
-    -------
-    IoU as a ratio in [0, 1].
+    Returns:
+        IoU as a ratio in [0, 1].
     """
     intersection_area: float = calculate_footprint_intersection_area(
         footprint1, footprint2

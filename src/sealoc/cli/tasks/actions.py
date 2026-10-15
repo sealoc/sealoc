@@ -1,6 +1,4 @@
-"""
-Actions for invoking sealocs tasks through the CLI.
-"""
+"""Actions for invoking sealocs tasks through the CLI."""
 
 from pathlib import Path
 
@@ -23,13 +21,12 @@ def dispatch_init_database(
     database_url: str | None,
     clear_database: bool,
 ) -> None:
-    """
-    Dispatch a task to initialize a database.
+    """Dispatch a task to initialize a database.
 
-    Arguments
-    ---------
-    database_url: Database URL string. Falls back to the SEALOC_DATABASE_URL env var.
-    clear_database: Whether to drop existing tables before creating new ones.
+    Args:
+        database_url: Database URL string. Falls back to the SEALOC_DATABASE_URL env
+            var.
+        clear_database: Whether to drop existing tables before creating new ones.
     """
     resolved_url: str | None = database_url or load_environment().database_url
     if resolved_url is None:
@@ -47,13 +44,12 @@ def dispatch_populate_database(
     database_url: str | None,
     input_dir: Path,
 ) -> None:
-    """
-    Dispatch a task to populate a database from files.
+    """Dispatch a task to populate a database from files.
 
-    Arguments
-    ---------
-    database_url: Database URL string. Falls back to the SEALOC_DATABASE_URL env var.
-    input_dir: Directory containing the camera CSV files.
+    Args:
+        database_url: Database URL string. Falls back to the SEALOC_DATABASE_URL env
+            var.
+        input_dir: Directory containing the camera CSV files.
     """
     resolved_url: str | None = database_url or load_environment().database_url
     if resolved_url is None:
@@ -75,17 +71,15 @@ def dispatch_download_dataset(
     exclude_patterns: tuple[str],
     config_path: Path | None,
 ) -> None:
-    """
-    Dispatch a task to download the SEALOC dataset.
+    """Dispatch a task to download the SEALOC dataset.
 
-    Arguments
-    ---------
-    root_dir: Root directory to download files into.
-    max_workers: Maximum number of concurrent download workers.
-    overwrite: Whether to overwrite existing files.
-    toc_url: URL of the dataset table-of-contents CSV.
-    exclude_patterns: Filename patterns to exclude from the download.
-    config_path: Path to a TOML config file with routing rules.
+    Args:
+        root_dir: Root directory to download files into.
+        max_workers: Maximum number of concurrent download workers.
+        overwrite: Whether to overwrite existing files.
+        toc_url: URL of the dataset table-of-contents CSV.
+        exclude_patterns: Filename patterns to exclude from the download.
+        config_path: Path to a TOML config file with routing rules.
     """
     config = (
         load_download_config(config_path) if config_path else DEFAULT_DOWNLOAD_CONFIG

@@ -1,6 +1,4 @@
-"""
-Module for calculating metrics based on camera poses.
-"""
+"""Module for calculating metrics based on camera poses."""
 
 import numpy as np
 import shapely  # type: ignore[import-untyped]
@@ -15,17 +13,14 @@ def calculate_pose_distance(
     pose1: CameraPose,
     pose2: CameraPose,
 ) -> float:
-    """
-    Calculate the distance between two camera poses in meters.
+    """Calculate the distance between two camera poses in meters.
 
-    Arguments
-    ---------
-    pose1: First camera pose.
-    pose2: Second camera pose.
+    Args:
+        pose1: First camera pose.
+        pose2: Second camera pose.
 
-    Returns
-    -------
-    Distance between the two poses in meters.
+    Returns:
+        Distance between the two poses in meters.
     """
     crs_to: tfs.CRS = tfs.estimate_utm_crs([pose1.shape])
 
@@ -47,17 +42,14 @@ def calculate_pose_distance(
 
 
 def calculate_point_distance(point1: shapely.Point, point2: shapely.Point) -> float:
-    """
-    Calculate the distance between two shapely points.
+    """Calculate the distance between two shapely points.
 
-    Arguments
-    ---------
-    point1: First point.
-    point2: Second point.
+    Args:
+        point1: First point.
+        point2: Second point.
 
-    Returns
-    -------
-    Euclidean distance between the two points.
+    Returns:
+        Euclidean distance between the two points.
     """
     array1: np.ndarray = np.array(point1.coords).squeeze()
     array2: np.ndarray = np.array(point2.coords).squeeze()
