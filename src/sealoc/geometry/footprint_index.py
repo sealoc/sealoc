@@ -76,6 +76,9 @@ class CameraFootprintIndex:
 
         Returns:
             Database footprints that intersect the query footprint.
+
+        Examples:
+            >>> overlapping = index.search(query_camera.get_footprint())
         """
         query_transformer: tfs.Transformer = tfs.Transformer.from_crs(
             query_footprint.crs,
@@ -103,6 +106,10 @@ class CameraFootprintIndex:
 
         Returns:
             Links between the query footprint and each overlapping database footprint.
+
+        Examples:
+            >>> links = index.search_links(query_camera.get_footprint())
+            >>> overlaps = [link.footprint_iou for link in links]
         """
         overlapping_footprints: list[CameraFootprint] = self.search(query_footprint)
         return [
@@ -130,6 +137,9 @@ def create_camera_footprint_index(
 
     Returns:
         CameraFootprintIndex built from the given footprints.
+
+    Examples:
+        >>> index = create_camera_footprint_index(database_group.camera_footprints)
     """
     if len(camera_footprints) == 0:
         raise ValueError("camera_footprints must not be empty.")

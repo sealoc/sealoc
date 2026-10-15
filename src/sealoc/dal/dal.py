@@ -57,6 +57,10 @@ class DataAccessLayer:
 
         Yields:
             All camera model repositories bound to the open session.
+
+        Examples:
+            >>> with dal.session() as repositories:
+            ...     bundle = repositories.bundles.get_one_by(label="survey_2023")
         """
         with db.session_scope(self.engine) as session:
             yield Repositories(
@@ -80,6 +84,16 @@ def load_data_access_layer(
 
     Returns:
         Configured DataAccessLayer instance.
+
+    Examples:
+        >>> dal = load_data_access_layer()
+
+        Override the environment explicitly:
+
+        >>> dal = load_data_access_layer(
+        ...     database_url="sqlite:////data/sealoc/sealoc.db",
+        ...     image_dir="/data/sealoc/sealoc_images_raw",
+        ... )
     """
     environment: Environment = load_environment()
     resolved_url: str | None = database_url or environment.database_url

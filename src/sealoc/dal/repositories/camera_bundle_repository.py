@@ -31,6 +31,10 @@ class CameraBundleRepository:
 
         Returns:
             Set of all camera bundle ids.
+
+        Examples:
+            >>> with dal.session() as repositories:
+            ...     ids = repositories.bundles.get_all_ids()
         """
         statement = db.select(orm.CameraBundleRecord.id)
         result = self.session.exec(statement)
@@ -44,6 +48,10 @@ class CameraBundleRepository:
 
         Returns:
             Matching CameraBundle, or None if not found.
+
+        Examples:
+            >>> with dal.session() as repositories:
+            ...     bundle = repositories.bundles.get_by_id(1)
         """
         record: orm.CameraBundleRecord | None = self.session.get(
             orm.CameraBundleRecord, id
@@ -58,6 +66,10 @@ class CameraBundleRepository:
 
         Returns:
             First matching CameraBundle, or None if not found.
+
+        Examples:
+            >>> with dal.session() as repositories:
+            ...     bundle = repositories.bundles.get_one_by(label="survey_2023")
         """
         statement = self._build_select_statement(filters)
         result = self.session.exec(statement)
@@ -72,6 +84,10 @@ class CameraBundleRepository:
 
         Returns:
             List of all matching CameraBundle models.
+
+        Examples:
+            >>> with dal.session() as repositories:
+            ...     bundles = repositories.bundles.get_all_by(label="survey_2023")
         """
         statement = self._build_select_statement(filters)
         result = self.session.exec(statement)
