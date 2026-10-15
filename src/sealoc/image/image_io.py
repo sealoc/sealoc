@@ -8,6 +8,7 @@ import imageio.v3 as iio
 import numpy as np
 
 from pathlib import Path
+from typing import Any
 
 from .image_types import (
     Image,
@@ -50,7 +51,7 @@ def read_image(
     index: int | None = None,
     plugin: str | None = None,
     extension: str | None = None,
-    **kwargs,
+    **kwargs: Any,
 ) -> Image:
     """Read an image from a URI into an Image.
 
@@ -93,7 +94,7 @@ def write_image(
     *,
     plugin: str | None = None,
     extension: str | None = None,
-    **kwargs,
+    **kwargs: Any,
 ) -> Path | str:
     """Write an image to a URI using imageio.
 
