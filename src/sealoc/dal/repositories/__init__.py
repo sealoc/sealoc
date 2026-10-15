@@ -6,3 +6,10 @@ from .camera_footprint_repository import (
     CameraFootprintRepository as CameraFootprintRepository,
 )
 from .camera_pose_repository import CameraPoseRepository as CameraPoseRepository
+
+__all__ = [
+    "CameraBundleRepository",
+    "CameraGroupRepository",
+    "CameraFootprintRepository",
+    "CameraPoseRepository",
+]

@@ -59,6 +59,11 @@ dev = [
     "pytest>=9.0.3",
     "ruff>=0.8.3",
 ]
+docs = [
+    "mkdocs>=1.6",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.27",
+]
 
 [tool.ruff.lint]
 extend-select = ["D"]

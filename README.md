@@ -12,10 +12,12 @@ the dataset and querying camera geometry data (poses, footprints, calibrations).
 
 ## Documentation
 
-- [Getting Started](docs/01_getting_started.md) — install, download the dataset, and run your first query
-- [Usage](docs/02_usage.md) — practical examples for querying bundles, calibrations, poses, and spatial indices
-- [Data Model](docs/03_data_model.md) — bundles, groups, cameras, poses, and footprints explained
-- [API Reference](docs/04_api_reference.md) — full reference for `DataAccessLayer`, repositories, and geometry indices
+The documentation is hosted at [sealoc.github.io/sealoc](https://sealoc.github.io/sealoc/).
+
+- [Getting Started](https://sealoc.github.io/sealoc/getting-started/) — install, download the dataset, and run your first query
+- [Usage](https://sealoc.github.io/sealoc/usage/) — practical examples for querying bundles, calibrations, poses, and spatial indices
+- [Data Model](https://sealoc.github.io/sealoc/data-model/) — bundles, groups, cameras, poses, and footprints explained
+- [API Reference](https://sealoc.github.io/sealoc/api/dal/) — reference generated from the source code docstrings
 
 ## Quick start
 
@@ -31,7 +33,7 @@ uv add git+https://github.com/sealoc/sealoc.git
 pip install git+https://github.com/sealoc/sealoc.git
 ```
 
-See the [Getting Started guide](docs/01_getting_started.md) for how to download the
+See the [Getting Started guide](https://sealoc.github.io/sealoc/getting-started/) for how to download the
 dataset and run your first query.
 
 ## Configuration
@@ -147,7 +149,7 @@ with dal.session() as repos:
 ```
 
 Additional examples covering spatial indices can be found in the
-[Usage guide](docs/02_usage.md).
+[Usage guide](https://sealoc.github.io/sealoc/usage/).
 
 ## Citation
 
